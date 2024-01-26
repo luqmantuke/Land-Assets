@@ -1,11 +1,36 @@
 .App {
   text-align: center;
-}
+  background-color:#f0f0f0;
 
+}
+.page{
+  background-color:#f0f0f0;
+ 
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+.react-datepicker-wrapper{
+  width: 95%;
+}
+.react-datepicker__day{
+  background-color: #F1F6FA;
+  color: #366EB5 !important;
+  border-radius: 20px;
+
+}
+.react-datepicker__day:hover{
+  background-color: #0E8141 !important;
+  color: white !important;
+  border-radius: 20px !important;
+}
+.selected-day{
+  background-color: #0E8141 !important;
+  color: white !important;
+  border-radius: 20px !important;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

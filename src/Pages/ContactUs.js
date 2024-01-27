@@ -12,7 +12,7 @@ export const ContactUs = () => {
    <div>
     <Hero heading={`Contact Us`} desc={`Get in touch with the LandAssets Team`} margin='6rem'/>
     <ContactForm/>
-    <Footer/>
+    <Footer />
 
    </div>
   )

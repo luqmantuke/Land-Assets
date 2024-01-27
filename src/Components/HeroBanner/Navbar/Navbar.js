@@ -70,7 +70,7 @@ const Navbar = () => {
           <Link to="/">
             <NavbarLink text="Home" />
           </Link>
-          <Link>
+          <Link to='/aboutUs'>
             <NavbarLink text="About Us" />
           </Link>
           <Link to="/services">
@@ -105,7 +105,7 @@ const Navbar = () => {
             <Link to="/">
               <NavbarLink text="Home" />
             </Link>
-            <Link>
+            <Link to="/aboutUs">
               <NavbarLink text="About Us" />
             </Link>
             <Link to="/services">

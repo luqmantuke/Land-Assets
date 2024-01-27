@@ -91,8 +91,9 @@ const TablesData={
       "Reserved Plots",
       "Site Visit Bookings",
       
-      " Wish List",
-      "Notification",
+      "My Payout",
+      "Account Details",
+      "Invite Another Agent",
       "Support",
       "Settings"
 

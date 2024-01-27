@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Image, Heading, Text, VStack, HStack, List, ListItem } from '@chakra-ui/react';
 
-const Footer = () => {
+const Footer = ({isTesti}) => {
  
   const column1Data = [
     { id: 1, description: 'Whether you need a residential or commercial plot of any size and guaranteed title deed,We have got you covered' },
@@ -35,7 +35,7 @@ const Footer = () => {
   ];
 
   return (
-    <Box as="footer" p={{base:'20px',md:'4rem'}} bg="footer_bg" color="white" mt='3rem' >
+    <Box as="footer" p={{base:'20px',md:'4rem'}} bg="footer_bg" color="white" mt={isTesti?'0':'3rem'} >
       <HStack  justify={{base:'center',md:'flex-start'}} gap={{base:'2rem',md:'6rem'}} margin={{base:'0 20px',x_sm:'0 40px',md:'0 50px'}} flexDirection={{base:'column',md:'row'}}>
       <VStack align={{base:'center',md:'flex-start'}} spacing={5} width={{base:'auto',md:'28%'}} textAlign={{base:'center',md:'left'}}>
           {/* Column 1 */}

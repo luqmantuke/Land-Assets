@@ -10,6 +10,7 @@ const theme = extendTheme({
     date_bg:'#eef1f5',
     box_bg:'#0e8241',
     btn_bg:'#0f301a',
+    about_heading:'#216042',
     
     btn_border:'#37ab46',
     footer_bg:'#081d36'
@@ -21,6 +22,7 @@ const theme = extendTheme({
  
   },
   breakpoints: {
+    
     x_sm:"25em",
     sm: "30em",
     md: "48em",

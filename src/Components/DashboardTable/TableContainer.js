@@ -17,10 +17,19 @@ import { SupportComp } from "../Support/SupportComp";
 import NotificationDetails from "../DashboardContent/NotificationDetails";
 import { initialNotificationsData } from "./TablesData";
 import Settings from "../DashboardContent/Settings";
+import Payout from "../DashboardContent/Payout";
+import PaymentMethod from "../DashboardContent/PaymentMethod";
+import ReferAgent from "../DashboardContent/ReferAgent";
 
 
-
-const TableContainer = ({ heading, buttons, elements, tableData, boxType,dashType }) => {
+const TableContainer = ({
+  heading,
+  buttons,
+  elements,
+  tableData,
+  boxType,
+  dashType,
+}) => {
   return (
     <Box
       py={{ base: "30px", md: "40px" }}
@@ -30,7 +39,7 @@ const TableContainer = ({ heading, buttons, elements, tableData, boxType,dashTyp
       borderRadius="10px"
       m="2rem"
     >
-      <Link to={dashType==='agent'?'/agentDash':'/customerDash'}>
+      <Link to={dashType === "agent" ? "/agentDash" : dashType==="payment"?"/agentDash/payouts": "/customerDash"}>
         <Image
           src={`${process.env.PUBLIC_URL}/Assets/SVG/Left-Arrow.svg`}
           width="30px"
@@ -45,7 +54,7 @@ const TableContainer = ({ heading, buttons, elements, tableData, boxType,dashTyp
         justify="space-between"
         mb="4"
       >
-        <Heading fontSize="1.3rem">{heading.toUpperCase()}</Heading>
+        <Heading fontSize={{base:'1rem',md:'1.3rem'}}>{heading.toUpperCase()}</Heading>
         <HStack spacing="2">
           {buttons.map((button, index) => (
             <Button
@@ -118,14 +127,17 @@ const TableContainer = ({ heading, buttons, elements, tableData, boxType,dashTyp
         <SupportComp />
       ) : boxType === "notificationDetail" ? (
         <NotificationDetails notificationsData={initialNotificationsData} />
-      ) :  boxType === "settings"?(
-        <Settings/>
-      
-           
+      ) : boxType === "settings" ? (
+        <Settings />
+      ) : boxType === "payout" ? (
+        <Payout />
+      ) : boxType === "paymentMethod" ?(
+       <PaymentMethod/>
+      ):boxType === "refer"?(
+           <ReferAgent/>
       ):(
         <DashTable data={tableData} />
-      )
-    }
+     ) }
     </Box>
   );
 };

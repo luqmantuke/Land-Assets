@@ -5,8 +5,9 @@ import { DashboardContent } from "../Components/DashboardContent/DashboardConten
 import TableContainer from "../Components/DashboardTable/TableContainer";
 import { Box } from "@chakra-ui/react";
 import TablesData from "../Components/DashboardTable/TablesData";
-import Agent from "../Components/DashboardContent/Agent";
+
 import { EstateSection } from "../Components/EstateSection/EstateSection";
+import Highlights from "../Components/DashboardContent/Highlights";
 
 
 
@@ -20,7 +21,7 @@ export const AgentDash = () => {
         margin="0"
         mb="3.5rem"
       />
-
+<Highlights/>
 
       <Routes>
         {/* Routes to all dashboard components */}
@@ -97,9 +98,25 @@ export const AgentDash = () => {
           element={
             <TableContainer
               heading={TablesData.agent_headings[4]}
-              buttons={TablesData.buttons3}
+              buttons={TablesData.empty}
               elements={TablesData.empty}
               tableData={TablesData.resaleTable}
+              boxType='payout'
+              dashType="agent"
+            />
+          }
+        />
+         <Route
+          path="/paymentMethod"
+          exact
+          element={
+            <TableContainer
+              heading={TablesData.agent_headings[5]}
+              buttons={TablesData.empty}
+              elements={TablesData.empty}
+              tableData={TablesData.resaleTable}
+              boxType='paymentMethod'
+              dashType='payment'
             />
           }
         />
@@ -130,7 +147,14 @@ export const AgentDash = () => {
             />
           }
         />
-        <Route path="/referAgent" exact element={<Agent isEmpty="true" />} />
+        <Route path="/referAgent" exact element={ <TableContainer
+              heading={TablesData.agent_headings[6]}
+              buttons={TablesData.empty}
+              elements={TablesData.empty}
+              tableData={TablesData.myPlotsTable}
+              boxType="refer"
+              dashType="agent"
+            />} />
         <Route
           path="/agentSettings"
           exact
@@ -156,6 +180,7 @@ export const AgentDash = () => {
               elements={TablesData.empty}
               tableData={TablesData.empty}
               boxType="notification"
+              dashType="agent"
             />
           }
         />
@@ -169,6 +194,7 @@ export const AgentDash = () => {
               elements={TablesData.empty}
               tableData={TablesData.empty}
               boxType="notificationDetail"
+              dashType="agent"
             />
           }
         />

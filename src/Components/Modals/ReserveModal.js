@@ -16,30 +16,23 @@ import {
   Button,
   Box,
   Text,
-  Checkbox
- 
+  Checkbox,
 } from "@chakra-ui/react";
 import { reserveIcons } from "../EstateSection/estateData";
 
-
 const ReserveModal = ({ isOpen, onClose }) => {
-  const [check,setCheck]=useState(false);
+  const [check, setCheck] = useState(false);
 
-  const handleCheck=()=>{
-      setCheck(!check)
-  }
-
+  const handleCheck = () => {
+    setCheck(!check);
+  };
 
   const handleSubmit = () => {
     // Handle form submission
 
     onClose(); // Close the modal after submission
-    
- 
-  
   };
 
- 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -74,22 +67,28 @@ const ReserveModal = ({ isOpen, onClose }) => {
                 <CustomLabel text="Estate Name" />
                 <CustomInput width="95%" />
               </FormControl>
-              <FormControl ml={{base:'1rem',md:'2rem'}}>
+              <FormControl ml={{ base: "1rem", md: "2rem" }}>
                 <CustomLabel text="Plot Number" />
                 <CustomInput width="80%" />
               </FormControl>
               <FormControl>
                 <CustomLabel text="Reservation Fee" />
-                <CustomInput   width="95%" />
+                <CustomInput width="95%" />
               </FormControl>
             </Box>
             <Box display="flex" width="100%">
-              <FormControl width={{base:'50%',md:'33%'}}>
+              <FormControl width={{ base: "50%", md: "33%" }}>
                 <CustomLabel text="Enter Phone Number" />
-                <CustomInput  width="90%" />
+                <CustomInput width="90%" />
               </FormControl>
 
-              <Box display="flex" gap="0.5rem" ml="1rem" flexWrap="wrap" justifyContent='space-around'>
+              <Box
+                display="flex"
+                gap="0.5rem"
+                ml="1rem"
+                flexWrap="wrap"
+                justifyContent="space-around"
+              >
                 {reserveIcons.map((icon, index) => (
                   <Image
                     key={index}
@@ -98,50 +97,71 @@ const ReserveModal = ({ isOpen, onClose }) => {
                     }}
                     src={`${process.env.PUBLIC_URL}/Assets/Images/${icon}`}
                     alt={`Image ${index + 1}`}
-                    width={{base:'60px',md:'72px'}}
-                    height={{base:'30px',md:'40px'}}
+                    width={{ base: "60px", md: "72px" }}
+                    height={{ base: "30px", md: "40px" }}
                   />
                 ))}
               </Box>
             </Box>
 
-            <HStack justifyContent="space-between" width="100%" alignItems='start'>
-              <VStack  spacing={8} >
-                   <Box display='flex' flexDirection='column'  >
-                     <Text fontSize={{ base: "10px", md: "15px" }} color='primary'>Note:</Text>
-                    
-                     <Text fontSize={{ base: "8px", md: "12px" }} color='gray' width='85%'>This Reservation fee 10,0000 for plot No. 450 is valid for 7 days if the plot is not purchased within 7 days of reservation,the reservation will be cancelled wihtout a Refund</Text>
-                   </Box>
-             
-              <Box display="flex" width='100%' gap='0.2rem'>
-              <Checkbox
-            isChecked={check}
-            onChange={handleCheck}
-            border='none'
-            colorScheme="primary"
-            
-           
-            icon={<Image src={`/Assets/Images/${check? 'check@4x.png' : 'uncheck@4x.png'}`}  width={check?'auto':'9px'}  mt={check?'0px':'3px'} ml={check?'3px':'0px'}/>}
-          />
-                <VStack spacing={0}>
-                  <Text
-                    color="GrayText"
-                    padding="0px"
-                    margin={0}
-                    fontSize={{ base: "8px", md: "8px" }}
-                  >
-                    I Agree to LandAssets
+            <HStack
+              justifyContent="space-between"
+              width="100%"
+              alignItems="start"
+            >
+              <VStack spacing={8}>
+                <Box display="flex" flexDirection="column">
+                  <Text fontSize={{ base: "10px", md: "15px" }} color="primary">
+                    Note:
                   </Text>
+
                   <Text
-                    color="btn_border"
-                    padding="0px"
-                    margin={0}
-                    fontSize={{ base: "8px", md: "8px" }}
+                    fontSize={{ base: "8px", md: "12px" }}
+                    color="gray"
+                    width="85%"
                   >
-                    Privacy Policy & Terms
+                    This Reservation fee 10,0000 for plot No. 450 is valid for 7
+                    days if the plot is not purchased within 7 days of
+                    reservation,the reservation will be cancelled wihtout a
+                    Refund
                   </Text>
-                </VStack>
-              </Box>
+                </Box>
+
+                <Box display="flex" width="100%" gap="0.2rem">
+                  <Checkbox
+                    onChange={handleCheck}
+                    border="none"
+                    colorScheme="primary"
+                    icon={
+                      <Image
+                        src={`/Assets/Images/${
+                          check ? "check@4x.png" : "uncheck@4x.png"
+                        }`}
+                        width={check ? "auto" : "9px"}
+                        mt={check ? "0px" : "3px"}
+                        ml={check ? "3px" : "0px"}
+                      />
+                    }
+                  />
+                  <VStack spacing={0}>
+                    <Text
+                      color="GrayText"
+                      padding="0px"
+                      margin={0}
+                      fontSize={{ base: "8px", md: "8px" }}
+                    >
+                      I Agree to LandAssets
+                    </Text>
+                    <Text
+                      color="btn_border"
+                      padding="0px"
+                      margin={0}
+                      fontSize={{ base: "8px", md: "8px" }}
+                    >
+                      Privacy Policy & Terms
+                    </Text>
+                  </VStack>
+                </Box>
               </VStack>
               <Button
                 backgroundColor="btn_bg"
@@ -171,7 +191,6 @@ const CustomInput = ({ width }) => {
     <Input
       height={{ base: "16px", md: "24px" }}
       border="none"
-     
       padding="0px"
       borderRadius="0px"
       boxShadow="transparent"
@@ -202,6 +221,5 @@ const CustomLabel = ({ text }) => {
     </FormLabel>
   );
 };
-
 
 export default ReserveModal;

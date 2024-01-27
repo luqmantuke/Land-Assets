@@ -115,6 +115,7 @@ const BuyModal = ({ isOpen, onClose }) => {
                     <Stack direction="row">
                       <Checkbox
                         colorScheme="green"
+                      
                         isChecked={paymentOption === "full"}
                         _hover={{
                           boxShadow: "none",
@@ -191,7 +192,7 @@ const BuyModal = ({ isOpen, onClose }) => {
             <HStack justifyContent="space-between" width="100%">
               <Box display="flex" gap='0.2rem'>
               <Checkbox
-            isChecked={check}
+          
             onChange={handleCheck}
             border='none'
             colorScheme="primary"

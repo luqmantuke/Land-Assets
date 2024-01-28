@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* Hamburger Menu (Mobile) */}
         <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
           {isOpen ? (
-            <CloseIcon boxSize={6} />
+            <></>
           ) : (
             <HamburgerIcon boxSize={6} color="white" />
           )}

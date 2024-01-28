@@ -20,8 +20,8 @@ export const estateData = [
     { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },
     { label: "Total Cash Price", value: "12 Months" },
     { label: "Total Partial Payment Price", value: "Tsh. 3,400,000" },
-    { label: "1st Installment", value: "Tsh. 5,23,000" },
-    { label: "Monthly Installment", value: "Tsh. 5,23,000" },
+    { label: "1st Installment", value: "Tsh. 523,000" },
+    { label: "Monthly Installment", value: "Tsh. 523,000" },
   ];
 
  export const reserveIcons = [

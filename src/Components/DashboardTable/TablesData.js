@@ -28,48 +28,48 @@ const TablesData={
   
     myPlotsTable:[
         [ "Plot No", "Estate Name", "Size", "Price", "Pending Payment"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Fully Paid"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Tsh. 7,000,000"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Fully Paid" ],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Fully Paid"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Tsh. 7,000,000"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "Fully Paid" ],
     ],
     paymentsTable:[
         [ "Plot No", "Estate Name", "Next Installment", "Amount", "Remaining Balance","Status"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh.7,500,000","Pending"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Overdue"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid" ],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid" ],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh.7,500,000","Pending"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Overdue"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid" ],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid" ],
     ],
     pendingpaysTable:[
       [ "Plot No", "Estate Name", "Next Installment", "Amount", "Remaining Balance","Status","Details"],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh.7,500,000","Pending","Plot Details"],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Overdue","Plot Details"],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid","Plot Details" ],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid","Plot Details" ],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh.7,500,000","Pending","Plot Details"],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Overdue","Plot Details"],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid","Plot Details" ],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "24 November 2023", "Tsh. 15,000,000", "Tsh. 7,500,000","Paid","Plot Details" ],
   ],
     bookingTable:[
         [ "Plot No", "Estate Name", "Size", "Price", "Booking Date","Day to Visit","Status"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","24 January 2024","Sold"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","12 February 2024","Available"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","24 January 2024","Sold"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","12 February 2024","Available"],
       
     ],
     reservedTable:[
       [ "Plot No", "Estate Name", "Size", "Price", "Reserved Date","Status"],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","6 days left"],
-      ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","3 days left"],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","6 days left"],
+      ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","3 days left"],
     
   ],
     wishlistTable:[
         [ "Plot No", "Estate Name", "Size", "Price", "Day Added","Status"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
       
     ],
     resaleTable:[
         [ "Plot No", "Estate Name", "Size", "Price", "Day Added","Status"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
-        ["140","Nyere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Sold"],
+        ["140","Nyerere Garden,Malimbika,Kigambanin", "sqm 528", "Tsh. 13,000,000", "24 November 2023","Available"],
        
       
     ],

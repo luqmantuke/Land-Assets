@@ -13,7 +13,7 @@ export const AboutUs = () => {
 
   return (
    <div>
-    <Hero heading={`Welcomt to \nLandAssets Holdings`} desc={`Your Ultimate destination for prime\n land aquisitions`}  margin='4rem'/>
+    <Hero heading={`Welcome to \nLandAssets Holdings`} desc={`Your Ultimate destination for prime\n land aquisitions`}  margin='4rem'/>
      <Vision/>
      <WhyUs/>
      <FaqComponent/>

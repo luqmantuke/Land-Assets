@@ -22,7 +22,7 @@ const CustomDatePicker = ({ selectedDate, handleChange }) => {
   
   return (
     <FormControl  background="gray.200" borderRadius='5px' >
-      <FormLabel  fontSize={{base:'9px',md:'11px'}} color='gray.600'  position="absolute" left="11px" top='27%' transform="translateY(-50%)">Auto Date Range</FormLabel>
+      <FormLabel  fontSize={{base:'9px',md:'11px'}} color='gray.600'  position="absolute" left="11px" top='27%' transform="translateY(-50%)">Select Date Range</FormLabel>
       <DatePicker
       
         selected={selectedDate}
@@ -96,7 +96,7 @@ const Highlights = () => {
           </Button>
           </Link>
           {/* First Element */}
-          <Box width={{base:'100%',x_sm:'45%'}}>
+          <Box width={{base:'90%',x_sm:'45%'}}>
             <CustomDatePicker
               selectedDate={selectedDate}
               handleChange={handleDateChange}

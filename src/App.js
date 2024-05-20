@@ -11,12 +11,18 @@ import { SignUp } from './Pages/SignUp';
 import { CustomerDash } from './Pages/CustomerDash';
 import { AgentDash } from './Pages/AgentDash';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+const queryClient = new QueryClient();
 
 function App() {
  
   return (
+    <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={true} />
     <Router>
+    
     <div className='App'>
 
   
@@ -35,6 +41,8 @@ function App() {
    
     </div>
     </Router>
+
+    </QueryClientProvider>
 
       
   );

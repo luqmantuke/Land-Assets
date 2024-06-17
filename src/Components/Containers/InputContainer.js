@@ -1,7 +1,21 @@
 import React from "react";
 import { Box, Flex, Text, Input, Image } from "@chakra-ui/react";
+import {formattedPrice} from "../../common/price/PriceFormatter"
 
 const InputContainer = ({ inputData }) => {
+  const transformEstateData = [
+    { label: "Estate Name", value: inputData.estate_name },
+    { label: "Estate Size", value: inputData.estate_size },
+    { label: "Distance from Kigamboni Ferry", value: inputData.distance_from_kigamboni_ferry },
+    { label: "Distance from Main Road", value: inputData.distance_from_main_road },
+    { label: "Distance from Ocean", value: inputData.distance_from_ocean },
+    { label: "Number of Plots", value: inputData.number_of_plots },
+    { label: "Payment Term", value: inputData.payment_terms },
+    { label: "Cash Price per SQM", value: `Tsh. ${formattedPrice(inputData.cash_price_per_sqm)}` },
+    { label: "Installment Price per SQM", value: `Tsh. ${formattedPrice(inputData.installment_price_per_sqm)}` },
+    { label: "First Installment", value: `${inputData.first_installment} Months` },
+  ];
+  console.log(inputData)
   return (
     <Box
       p="4"
@@ -32,11 +46,11 @@ const InputContainer = ({ inputData }) => {
           textAlign="left"
           color="#384a57"
         >
-          Malimbika 1 Estate
+          {inputData.estate_name}
         </Text>
 
         <Image
-          src={`${process.env.PUBLIC_URL}/Assets/Images/Estate-Map.jpg`}
+          src={inputData.media[0].file}
           alt="Placeholder"
           height={{ base: "auto", md: "500px" }}
           width={{ base: "auto", md: "750px" }}
@@ -81,7 +95,7 @@ const InputContainer = ({ inputData }) => {
               }}
             />
           </Flex>
-          {inputData.map((data, index) => (
+          {transformEstateData.map((data, index) => (
             <InputLabel key={index} label={data.label} color="primary">
               <Input
                 border="none"

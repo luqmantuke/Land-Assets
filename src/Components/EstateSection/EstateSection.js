@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ButtonsContainer from "../Containers/ButtonsContainer";
 import InputContainer from "../Containers/InputContainer";
-import { Box, Image,Spinner } from "@chakra-ui/react";
+import { Box, Image,Spinner,useToast } from "@chakra-ui/react";
 import ShareModal from "../Modals/ShareModal.js";
 import DateModal from "../Modals/DateModal.js";
 import ReserveModal from "../Modals/ReserveModal.js";
@@ -25,6 +25,8 @@ export const EstateSection = ({ isAgent }) => {
 const plots = usePlotStore((state)=>state.plots)
 const plotLoading = usePlotStore((state)=>state.isLoading)
 const plotNumber = usePlotFilterStore((state) => state.plotNumber); // get the plot number from store
+const toast = useToast()
+
  console.log(`plotsss ${plots}`)
 
   const estateLBtns = [
@@ -139,7 +141,18 @@ const plotNumber = usePlotFilterStore((state) => state.plotNumber); // get the p
   const closeBuyModal = () => {
     setBuyModalOpen(false);
   };
-console.log(plotNumber);
+//   if(plotNumber != null){
+// var exists = plots.some(plot => plot.plot_name === plotNumber)
+// if(!exists){
+//   toast({
+//     title: 'Invalid Plot Number.',
+//     description: "Please input the plot number as seen from the map.",
+//     status: 'error',
+//     duration: 3000,
+//     isClosable: true,
+//   })
+// }}
+
   return (
     <div>
 {estateLoading == true || plotLoading == true ? <Spinner /> :
@@ -155,9 +168,11 @@ console.log(plotNumber);
           />
         </Link>
       ) : null}
-{console.log(`Plot log ${plots}`)}
-      {plotNumber ? plots?.map((plot) => (
-        
+      {plotNumber ? plots?.map((plot) => {
+
+      
+       return (
+      
         <Box key={plot.id} marginTop="2rem">
 
           <InputContainer inputData={plot} />
@@ -170,7 +185,7 @@ console.log(plotNumber);
             box_height={'200px'}
           />
         </Box>
-      )):  estates?.map((estate) => (
+      )}):  estates?.map((estate) => (
         <Box key={estate.id} marginTop="2rem">
           <InputContainer inputData={estate} />
           <ButtonsContainer

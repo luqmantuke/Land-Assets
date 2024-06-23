@@ -1,9 +1,24 @@
 import React from "react";
 import { Box, Flex, Text, Input, Image } from "@chakra-ui/react";
 import {formattedPrice} from "../../common/price/PriceFormatter"
+import { usePlotFilterStore } from "../../store/Plot/PlotStore";
+
+
 
 const InputContainer = ({ inputData }) => {
-  const transformEstateData = [
+  const { plotNumber, setPlotNumber } = usePlotFilterStore();
+console.log("plot numner ", plotNumber)
+  
+  const transformDetailsData = plotNumber ?   [
+    { label: "Plot No", value:  inputData.plotNumber},
+    { label: "Plot Size (SQM)", value: inputData.plot_size },
+    { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.estate.cash_price_per_sqm)}` },
+    { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },
+    { label: "Total Cash Price", value: "12 Months" },
+    { label: "Total Partial Payment Price", value: "Tsh. 3,400,000" },
+    { label: "1st Installment", value: "Tsh. 523,000" },
+    { label: "Monthly Installment", value: "Tsh. 523,000" },
+  ]: [
     { label: "Estate Name", value: inputData.estate_name },
     { label: "Estate Size", value: inputData.estate_size },
     { label: "Distance from Kigamboni Ferry", value: inputData.distance_from_kigamboni_ferry },
@@ -11,11 +26,13 @@ const InputContainer = ({ inputData }) => {
     { label: "Distance from Ocean", value: inputData.distance_from_ocean },
     { label: "Number of Plots", value: inputData.number_of_plots },
     { label: "Payment Term", value: inputData.payment_terms },
-    { label: "Cash Price per SQM", value: `Tsh. ${formattedPrice(inputData.cash_price_per_sqm)}` },
+    { label: "Cash Price per SQM", value: `${formattedPrice(inputData.cash_price_per_sqm)}` },
     { label: "Installment Price per SQM", value: `Tsh. ${formattedPrice(inputData.installment_price_per_sqm)}` },
     { label: "First Installment", value: `${inputData.first_installment} Months` },
   ];
-  console.log(inputData)
+
+ 
+
   return (
     <Box
       p="4"
@@ -46,11 +63,11 @@ const InputContainer = ({ inputData }) => {
           textAlign="left"
           color="#384a57"
         >
-          {inputData.estate_name}
+          {plotNumber ?  inputData.estate.estate_name : inputData.estate_name}
         </Text>
 
         <Image
-          src={inputData.media[0].file}
+          src={plotNumber ?  inputData.estate.media[0].file : inputData.media[0].file}
           alt="Placeholder"
           height={{ base: "auto", md: "500px" }}
           width={{ base: "auto", md: "750px" }}
@@ -60,7 +77,6 @@ const InputContainer = ({ inputData }) => {
 
       {/* Right Side */}
       <Box flex="32%">
-       
         <Flex
           direction="column"
           gap="1"
@@ -93,9 +109,10 @@ const InputContainer = ({ inputData }) => {
                 boxShadow: "none",
                 borderColor: "none",
               }}
+              onChange={(e) => setPlotNumber(e.target.value)} // update plot number in store
             />
           </Flex>
-          {transformEstateData.map((data, index) => (
+          {transformDetailsData.map((data, index) => (
             <InputLabel key={index} label={data.label} color="primary">
               <Input
                 border="none"

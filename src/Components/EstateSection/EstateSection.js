@@ -8,6 +8,8 @@ import ReserveModal from "../Modals/ReserveModal.js";
 import BuyModal from "../Modals/BuyModal.js";
 import { Link } from "react-router-dom";
 import useEstateStore from "../../store/Estate/EstateStore.js";
+import usePlotStore from "../../store/Plot/PlotStore.js";
+import { usePlotFilterStore } from "../../store/Plot/PlotStore.js";
 
 export const EstateSection = ({ isAgent }) => {
   const [shareModalOpen, setshareModalOpen] = useState(false);
@@ -19,8 +21,11 @@ export const EstateSection = ({ isAgent }) => {
   const [reserveModalOpen, setreserveModalOpen] = useState(false);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const estates = useEstateStore((state) => state.estates);
-  const isLoading = useEstateStore((state) => state.isLoading);
-
+  const estateLoading = useEstateStore((state) => state.isLoading);
+const plots = usePlotStore((state)=>state.plots)
+const plotLoading = usePlotStore((state)=>state.isLoading)
+const plotNumber = usePlotFilterStore((state) => state.plotNumber); // get the plot number from store
+ 
 console.log(estates)
   const estateLBtns = [
     {
@@ -137,7 +142,7 @@ console.log(estates)
 
   return (
     <div>
-{isLoading == true ? <Spinner /> :
+{estateLoading == true || plotLoading == true ? <Spinner /> :
     
     <div>
       {isAgent ? (
@@ -151,12 +156,24 @@ console.log(estates)
         </Link>
       ) : null}
 
-      {estates?.map((estate) => (
+      {plotNumber ? plots?.map((plot) => (
+        <Box key={plot.id} marginTop="2rem">
+          <InputContainer inputData={plot} />
+          <ButtonsContainer
+            leftButtons={estateLBtns}
+            rightButtons={estateLBtns}
+            flex_dir={'column-reverse'}
+            Lbtn_margin={'0.5rem'}
+            Rbtn_margin={'4rem'}
+            box_height={'200px'}
+          />
+        </Box>
+      )):  estates?.map((estate) => (
         <Box key={estate.id} marginTop="2rem">
           <InputContainer inputData={estate} />
           <ButtonsContainer
-            leftButtons={plotLBtns}
-            rightButtons={plotRBtns}
+            leftButtons={estateLBtns}
+            rightButtons={estateLBtns}
             flex_dir={'column-reverse'}
             Lbtn_margin={'0.5rem'}
             Rbtn_margin={'4rem'}

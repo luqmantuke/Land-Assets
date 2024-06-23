@@ -8,9 +8,9 @@ import { usePlotFilterStore } from "../../store/Plot/PlotStore";
 const InputContainer = ({ inputData }) => {
   const { plotNumber, setPlotNumber } = usePlotFilterStore();
 console.log("plot numner ", plotNumber)
-  
+  console.log("input data ", inputData.plot_name)
   const transformDetailsData = plotNumber ?   [
-    { label: "Plot No", value:  inputData.plotNumber},
+    { label: "Plot No", value:  inputData.plot_name},
     { label: "Plot Size (SQM)", value: inputData.plot_size },
     { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.estate.cash_price_per_sqm)}` },
     { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },

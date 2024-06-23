@@ -25,8 +25,8 @@ export const EstateSection = ({ isAgent }) => {
 const plots = usePlotStore((state)=>state.plots)
 const plotLoading = usePlotStore((state)=>state.isLoading)
 const plotNumber = usePlotFilterStore((state) => state.plotNumber); // get the plot number from store
- 
-console.log(estates)
+ console.log(`plotsss ${plots}`)
+
   const estateLBtns = [
     {
       icon: 'Share@4x.png',
@@ -139,7 +139,7 @@ console.log(estates)
   const closeBuyModal = () => {
     setBuyModalOpen(false);
   };
-
+console.log(plotNumber);
   return (
     <div>
 {estateLoading == true || plotLoading == true ? <Spinner /> :
@@ -155,13 +155,15 @@ console.log(estates)
           />
         </Link>
       ) : null}
-
+{console.log(`Plot log ${plots}`)}
       {plotNumber ? plots?.map((plot) => (
+        
         <Box key={plot.id} marginTop="2rem">
+
           <InputContainer inputData={plot} />
           <ButtonsContainer
-            leftButtons={estateLBtns}
-            rightButtons={estateLBtns}
+            leftButtons={plotLBtns}
+            rightButtons={plotRBtns}
             flex_dir={'column-reverse'}
             Lbtn_margin={'0.5rem'}
             Rbtn_margin={'4rem'}
@@ -173,7 +175,7 @@ console.log(estates)
           <InputContainer inputData={estate} />
           <ButtonsContainer
             leftButtons={estateLBtns}
-            rightButtons={estateLBtns}
+            rightButtons={estateRBtns}
             flex_dir={'column-reverse'}
             Lbtn_margin={'0.5rem'}
             Rbtn_margin={'4rem'}

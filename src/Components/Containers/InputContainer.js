@@ -1,37 +1,55 @@
-import React from "react";
-import { Box, Flex, Text, Input, Image } from "@chakra-ui/react";
-import {formattedPrice} from "../../common/price/PriceFormatter"
 import { usePlotFilterStore } from "../../store/Plot/PlotStore";
-
+import React, { useState } from 'react';
+import { Box, Text, Image, Flex, Input, Button,HStack } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import {formattedPrice} from "../../common/price/PriceFormatter"
 
 
 const InputContainer = ({ inputData }) => {
   const { plotNumber, setPlotNumber } = usePlotFilterStore();
-console.log("plot numner ", plotNumber)
-  console.log("input data ", inputData.plot_name)
-  const transformDetailsData = plotNumber ?   [
-    { label: "Plot No", value:  inputData.plot_name},
-    { label: "Plot Size (SQM)", value: inputData.plot_size },
-    { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.estate.cash_price_per_sqm)}` },
-    { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },
-    { label: "Total Cash Price", value: "12 Months" },
-    { label: "Total Partial Payment Price", value: "Tsh. 3,400,000" },
-    { label: "1st Installment", value: "Tsh. 523,000" },
-    { label: "Monthly Installment", value: "Tsh. 523,000" },
-  ]: [
-    { label: "Estate Name", value: inputData.estate_name },
-    { label: "Estate Size", value: inputData.estate_size },
-    { label: "Distance from Kigamboni Ferry", value: inputData.distance_from_kigamboni_ferry },
-    { label: "Distance from Main Road", value: inputData.distance_from_main_road },
-    { label: "Distance from Ocean", value: inputData.distance_from_ocean },
-    { label: "Number of Plots", value: inputData.number_of_plots },
-    { label: "Payment Term", value: inputData.payment_terms },
-    { label: "Cash Price per SQM", value: `${formattedPrice(inputData.cash_price_per_sqm)}` },
-    { label: "Installment Price per SQM", value: `Tsh. ${formattedPrice(inputData.installment_price_per_sqm)}` },
-    { label: "First Installment", value: `${inputData.first_installment} Months` },
-  ];
+  console.log("plot numner ", plotNumber)
+    console.log("input data ", inputData.plot_name)
+    const transformDetailsData = plotNumber ?   [
+      { label: "Plot No", value:  inputData.plot_name},
+      { label: "Plot Size (SQM)", value: inputData.plot_size },
+      { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.estate.cash_price_per_sqm)}` },
+      { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },
+      { label: "Total Cash Price", value: "12 Months" },
+      { label: "Total Partial Payment Price", value: "Tsh. 3,400,000" },
+      { label: "1st Installment", value: "Tsh. 523,000" },
+      { label: "Monthly Installment", value: "Tsh. 523,000" },
+    ]: [
+      { label: "Estate Name", value: inputData.estate_name },
+      { label: "Estate Size", value: inputData.estate_size },
+      { label: "Distance from Kigamboni Ferry", value: inputData.distance_from_kigamboni_ferry },
+      { label: "Distance from Main Road", value: inputData.distance_from_main_road },
+      { label: "Distance from Ocean", value: inputData.distance_from_ocean },
+      { label: "Number of Plots", value: inputData.number_of_plots },
+      { label: "Payment Term", value: inputData.payment_terms },
+      { label: "Cash Price per SQM", value: `${formattedPrice(inputData.cash_price_per_sqm)}` },
+      { label: "Installment Price per SQM", value: `Tsh. ${formattedPrice(inputData.installment_price_per_sqm)}` },
+      { label: "First Installment", value: `${inputData.first_installment} Months` },
+    ];
+  
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
- 
+  const images = plotNumber ? inputData.estate.media : inputData.media;
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+  const InputLabel = ({ label, children, color }) => {
+    return (
+      <Box>
+        <Text color={color}>{label}</Text>
+        {children}
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -49,35 +67,47 @@ console.log("plot numner ", plotNumber)
     >
       {/* Left Side */}
       <Box
-        flex="68%"
+        flex="1"
         borderRight={{ sm: "0px", md: "2px" }}
         borderRightColor={{ base: "transparent", md: "primary" }}
-        mx="2rem"
-        marginTop="3rem"
+        pr={{ md: "2rem" }}
       >
         <Text
           fontSize="1.8rem"
           fontWeight="bold"
           mb="4"
-          ml="20px"
           textAlign="left"
           color="#384a57"
         >
-          {plotNumber ?  inputData.estate.estate_name : inputData.estate_name}
+          {plotNumber ? inputData.estate.estate_name : inputData.estate_name}
         </Text>
 
-        <Image
-          src={plotNumber ?  inputData.estate.media[0].file : inputData.media[0].file}
-          alt="Placeholder"
-          height={{ base: "auto", md: "500px" }}
-          width={{ base: "auto", md: "750px" }}
-          style={{ borderRadius: "8px" }}
-        />
+        <Box>
+          <Image
+            src={images[currentImageIndex].file}
+            alt={`Image ${currentImageIndex + 1}`}
+            width="100%"
+            height="auto"
+            objectFit="cover"
+            borderRadius="8px"
+          />
+          <HStack justifyContent="center" mt={4} spacing={4}>
+            <Button onClick={prevImage} leftIcon={<ChevronLeftIcon />} size="sm" variant="outline">
+              Prev
+            </Button>
+            <Text fontSize="sm">
+              Image {currentImageIndex + 1} of {images.length}
+            </Text>
+            <Button onClick={nextImage} rightIcon={<ChevronRightIcon />} size="sm" variant="outline">
+              Next
+            </Button>
+          </HStack>
+        </Box>
       </Box>
 
       {/* Right Side */}
-      <Box flex="32%">
-        <Flex
+      <Box flex="1" pl={{ md: "2rem" }} mt={{base:"2rem",md:"2rem", xl:"0rem", lg:"0rem"}}>
+      <Flex
           direction="column"
           gap="1"
           textAlign="left"
@@ -142,15 +172,8 @@ console.log("plot numner ", plotNumber)
       </Box>
     </Box>
   );
+
 };
 
-const InputLabel = ({ label, children, color }) => {
-  return (
-    <Box>
-      <Text color={color}>{label}</Text>
-      {children}
-    </Box>
-  );
-};
 
 export default InputContainer;

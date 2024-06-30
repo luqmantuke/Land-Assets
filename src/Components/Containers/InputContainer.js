@@ -28,7 +28,6 @@ const InputContainer = ({ inputData }) => {
       { label: "Payment Term", value: inputData.payment_terms },
       { label: "Cash Price per SQM", value: `${formattedPrice(inputData.cash_price_per_sqm)}` },
       { label: "Installment Price per SQM", value: `Tsh. ${formattedPrice(inputData.installment_price_per_sqm)}` },
-      { label: "First Installment", value: `${inputData.first_installment} Months` },
     ];
   
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

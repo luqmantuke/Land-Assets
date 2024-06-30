@@ -8,13 +8,22 @@ import {
   Image,
   Text,
   Checkbox,
+  useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth
+
+
+ } from "../../Hooks/Auth/AuthenticationContext";
+import { registerUser } from "../../Api/Auth/AuthenticationApi";
 const SignUpForm = () => {
+  const auth = useAuth(); 
   const [showPassword, setShowPassword] = useState(false);
   const [check, setCheck] = useState(false);
-  const [formError, setFormError] = useState(false);
+  const [formError, setFormError] = useState(false)
+  const toast = useToast()
+  const navigate = useNavigate()
 
   // Input states
   const [firstName, setFirstName] = useState("");
@@ -23,6 +32,7 @@ const SignUpForm = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheck = () => {
     setCheck(!check);
@@ -45,10 +55,44 @@ const SignUpForm = () => {
       setFormError(true);
     } else {
       setFormError(false);
-      // Perform signup logic here
+      signUpUser()
     }
   };
 
+  async function signUpUser() {
+    setIsLoading(true);
+    try {
+      const response = await registerUser(emailAddress, password);
+      console.log(response)
+      if (response.status === 'success') {
+
+        console.log("response status is true")
+        auth.login(response);
+        navigate('/');
+      } else {
+        setIsLoading(false);
+        toast(response.message, {
+          type: 'error',
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
+
+      }
+
+    } catch (error) {
+
+      setIsLoading(false);
+      toast('An error occurred while creating an account. Please contact support.', {
+        type: 'error',
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+
+
+    }
+  }
   return (
     <Box
       width={{ base: "70%", md: "50%" }}

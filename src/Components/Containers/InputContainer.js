@@ -12,12 +12,12 @@ const InputContainer = ({ inputData }) => {
     const transformDetailsData = plotNumber ?   [
       { label: "Plot No", value:  inputData.plot_name},
       { label: "Plot Size (SQM)", value: inputData.plot_size },
-      { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.estate.cash_price_per_sqm)}` },
-      { label: "Price/SQM (Partial Payment)", value: "Tsh. 22,000" },
-      { label: "Total Cash Price", value: "12 Months" },
-      { label: "Total Partial Payment Price", value: "Tsh. 3,400,000" },
-      { label: "1st Installment", value: "Tsh. 523,000" },
-      { label: "Monthly Installment", value: "Tsh. 523,000" },
+      { label: "Price per 1 SQM (Cash Sale)", value:   `${formattedPrice(inputData.plot_description.cash_price_per_sqm)}` },
+      { label: "Price/SQM (Partial Payment)", value: `${formattedPrice(inputData.plot_description.installment_price_per_sqm)}` },
+      { label: "Total Cash Price", value:  `${formattedPrice(inputData.plot_description.cash_price)}`},
+      { label: "Total Partial Payment Price", value: `${formattedPrice(inputData.plot_description.installment_price)}` },
+      { label: "1st Installment", value: `${formattedPrice(inputData.plot_description.first_installment)}` },
+      { label: "Monthly Installment", value: `${formattedPrice(inputData.plot_description.rest_installment)}` },
     ]: [
       { label: "Estate Name", value: inputData.estate_name },
       { label: "Estate Size", value: inputData.estate_size },

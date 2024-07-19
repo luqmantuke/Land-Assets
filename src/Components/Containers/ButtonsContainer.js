@@ -35,7 +35,7 @@ const ButtonsContainer = ({
         gap="2"
         mt={{ base: `${Lbtn_margin}`, md: "3rem" }}
       >
-        {leftButtons.map((button, index) => (
+        {leftButtons?.map((button, index) => (
           <Button
             key={index}
             variant="outline"
@@ -67,7 +67,7 @@ const ButtonsContainer = ({
         gap="2"
         mt={{ base: `${Rbtn_margin}`, md: "3rem" }}
       >
-        {rightButtons.map((button, index) => (
+        {rightButtons?.map((button, index) => (
           <Button
             key={index}
             variant="outline"

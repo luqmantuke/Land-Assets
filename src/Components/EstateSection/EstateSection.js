@@ -168,36 +168,29 @@ const toast = useToast()
           />
         </Link>
       ) : null}
-      {plotNumber ? plots?.map((plot) => {
+      {estates?.map((estate) => {
+  const matchingPlot = plotNumber
+    ? plots.find(plot => plot.plot_name === plotNumber && plot.estate.id === estate.id)
+    : null;
 
-      
-       return (
-      
-        <Box key={plot.id} marginTop="2rem">
-
-          <InputContainer inputData={plot} />
-          <ButtonsContainer
-            leftButtons={plotLBtns}
-            rightButtons={plotRBtns}
-            flex_dir={'column-reverse'}
-            Lbtn_margin={'0.5rem'}
-            Rbtn_margin={'4rem'}
-            box_height={'200px'}
-          />
-        </Box>
-      )}):  estates?.map((estate) => (
-        <Box key={estate.id} marginTop="2rem">
-          <InputContainer inputData={estate} />
-          <ButtonsContainer
-            leftButtons={estateLBtns}
-            rightButtons={estateRBtns}
-            flex_dir={'column-reverse'}
-            Lbtn_margin={'0.5rem'}
-            Rbtn_margin={'4rem'}
-            box_height={'200px'}
-          />
-        </Box>
-      ))}
+  return (
+    <Box key={estate.id} marginTop="2rem">
+      <InputContainer 
+        inputData={matchingPlot || estate} 
+        isPlot={!!matchingPlot}
+        estate={estate}  // Pass the full estate object
+      />
+      <ButtonsContainer
+        leftButtons={matchingPlot ? plotLBtns.left : estateLBtns.left}
+        rightButtons={matchingPlot ? plotLBtns.right : estateLBtns.right}
+        flex_dir={'column-reverse'}
+        Lbtn_margin={'0.5rem'}
+        Rbtn_margin={'4rem'}
+        box_height={'200px'}
+      />
+    </Box>
+  );
+})}
 
       <ShareModal
         isOpen={shareModalOpen}

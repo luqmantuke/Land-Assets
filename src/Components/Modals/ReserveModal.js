@@ -17,20 +17,73 @@ import {
   Box,
   Text,
   Checkbox,
+  useToast,
 } from "@chakra-ui/react";
 import { reserveIcons } from "../EstateSection/estateData";
+import { SERVER_URL } from "../../utilities/constant/api/api_constant";
 
-const ReserveModal = ({ isOpen, onClose }) => {
+const ReserveModal = ({ isOpen, onClose, plot, userID }) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
+  const toast = useToast();
 
   const handleCheck = () => {
     setCheck(!check);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
+  const handleSubmit = async () => {
+    if (!phoneNumber) {
+      toast({
+        title: "Error",
+        description: "Please enter your phone number",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
-    onClose(); // Close the modal after submission
+    setLoading(true);
+    var formdata = new FormData();
+    formdata.append("user_id", userID);
+    formdata.append("plot_id", plot?.id);
+    formdata.append("amount_paid", 100000);
+    formdata.append("phone_number", phoneNumber);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch(`${SERVER_URL}/api/reserve_plot/`, requestOptions);
+      const result = await response.json();
+      if (result.status_code === 200) {
+        toast({
+          title: result.status,
+          description: result.message,
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+          
+        });
+        onClose();
+      } else {
+        throw new Error(result.message || "Failed to reserve plot");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,23 +116,13 @@ const ReserveModal = ({ isOpen, onClose }) => {
           />
           <VStack spacing={6}>
             <Box display="flex" width="100%">
-              <FormControl>
-                <CustomLabel text="Estate Name" />
-                <CustomInput width="95%" />
-              </FormControl>
-              <FormControl ml={{ base: "1rem", md: "2rem" }}>
-                <CustomLabel text="Plot Number" />
-                <CustomInput width="80%" />
-              </FormControl>
-              <FormControl>
-                <CustomLabel text="Reservation Fee" />
-                <CustomInput width="95%" />
-              </FormControl>
+           
+          
             </Box>
             <Box display="flex" width="100%">
               <FormControl width={{ base: "50%", md: "33%" }}>
                 <CustomLabel text="Enter Phone Number" />
-                <CustomInput width="90%" />
+                <CustomInput  width="90%" handleNumber={(e) => setPhoneNumber(e.target.value)} />
               </FormControl>
 
               <Box
@@ -120,9 +163,9 @@ const ReserveModal = ({ isOpen, onClose }) => {
                     color="gray"
                     width="85%"
                   >
-                    This Reservation fee 10,0000 for plot No. 450 is valid for 7
+                    This Reservation fee 10,0000 for plot No. {plot?.plot_name} is valid for 7
                     days if the plot is not purchased within 7 days of
-                    reservation,the reservation will be cancelled wihtout a
+                    reservation,the reservation will be cancelled without a
                     Refund
                   </Text>
                 </Box>
@@ -173,6 +216,7 @@ const ReserveModal = ({ isOpen, onClose }) => {
                 _hover={{
                   backgroundColor: "#091c10",
                 }}
+                isLoading={loading}
                 color="white"
                 onClick={handleSubmit}
               >
@@ -186,7 +230,7 @@ const ReserveModal = ({ isOpen, onClose }) => {
   );
 };
 
-const CustomInput = ({ width }) => {
+const CustomInput = ({ width,handleNumber }) => {
   return (
     <Input
       height={{ base: "16px", md: "24px" }}
@@ -196,6 +240,7 @@ const CustomInput = ({ width }) => {
       boxShadow="transparent"
       borderBottom="1px solid #37ab46"
       width={width}
+      onChange={handleNumber}
       _hover={{
         borderColor: "none",
         boxShadow: "transparent",

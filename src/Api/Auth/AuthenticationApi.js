@@ -1,3 +1,4 @@
+import { SERVER_URL } from "../../utilities/constant/api/api_constant";
 export const loginUser = async (email,password) => {
 
     const formdata = new FormData();
@@ -9,7 +10,7 @@ export const loginUser = async (email,password) => {
       body: formdata,
       redirect: "follow"
     };
-    const response = await fetch(`https://land.haddypro.online/api/auth/login/`, requestOptions);
+    const response = await fetch(`${SERVER_URL}/api/auth/login/`, requestOptions);
 
     return response.json();
   };
@@ -29,7 +30,7 @@ export const loginUser = async (email,password) => {
       body: formdata,
       redirect: "follow"
     };
-    const response = await fetch(`https://land.haddypro.online/api/auth/signup/`, requestOptions);
+    const response = await fetch(`${SERVER_URL}/api/auth/signup/`, requestOptions);
     console.log(`Response ${response}`)
 
     return response.json();

@@ -1,210 +1,216 @@
 import React, { useState } from "react";
 import ButtonsContainer from "../Containers/ButtonsContainer";
 import InputContainer from "../Containers/InputContainer";
-import { Box, Image,Spinner,useToast } from "@chakra-ui/react";
+import { Box, Image, Spinner, useToast } from "@chakra-ui/react";
 import ShareModal from "../Modals/ShareModal.js";
 import DateModal from "../Modals/DateModal.js";
 import ReserveModal from "../Modals/ReserveModal.js";
 import BuyModal from "../Modals/BuyModal.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useEstateStore from "../../store/Estate/EstateStore.js";
 import usePlotStore from "../../store/Plot/PlotStore.js";
 import { usePlotFilterStore } from "../../store/Plot/PlotStore.js";
+import { SERVER_URL } from "../../utilities/constant/api/api_constant.js";
+import { useAuth } from "../../Hooks/Auth/AuthenticationContext.jsx";
 
 export const EstateSection = ({ isAgent }) => {
-  const [shareModalOpen, setshareModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalIcons, setModalIcons] = useState('');
-  const [modalLayoutType, setModalLayoutType] = useState('');
-  const [modalAdditionalText, setModalAdditionalText] = useState('');
-  const [dateModalOpen, setdateModalOpen] = useState(false);
-  const [reserveModalOpen, setreserveModalOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [dateModalOpen, setDateModalOpen] = useState(false);
+  const [reserveModalOpen, setReserveModalOpen] = useState(false);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [selectedPlot, setSelectedPlot] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const estates = useEstateStore((state) => state.estates);
   const estateLoading = useEstateStore((state) => state.isLoading);
-const plots = usePlotStore((state)=>state.plots)
-const plotLoading = usePlotStore((state)=>state.isLoading)
-const plotNumber = usePlotFilterStore((state) => state.plotNumber); // get the plot number from store
-const toast = useToast()
+  const plots = usePlotStore((state) => state.plots);
+  const plotLoading = usePlotStore((state) => state.isLoading);
+  const plotNumber = usePlotFilterStore((state) => state.plotNumber);
+  const toast = useToast();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
- console.log(`plotsss ${plots}`)
+  const handleShareEstate = () => {
+    setShareModalOpen(true);
+  };
+
+  const handleAddToWishlist = async (plot) => {
+    if(auth.isAuthenticated === false) {
+      navigate('/login');
+    }else{
+    setLoading(true);
+    var formdata = new FormData();
+    formdata.append("user_id", auth.user.userId);
+    formdata.append("plot_id", plot.id);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch(`${SERVER_URL}/api/add_plot_cart/`, requestOptions);
+      const result = await response.json();
+      if (result.status_code === 200) {
+        toast({
+          title: result.status,
+          description: result.message,
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+        });
+      } else {
+        throw new Error(result.message || "Failed to add to wishlist");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }}
+  };
+
+  const handleBookVisit = (plot) => {
+    if(auth.isAuthenticated === false) {
+      navigate('/login');
+    }
+    setSelectedPlot(plot);
+    setDateModalOpen(true);
+  };
+
+  const handleReservePlot = (plot) => {
+    if(auth.isAuthenticated === false) {
+      navigate('/login');
+    }
+    setSelectedPlot(plot);
+    setReserveModalOpen(true);
+  };
+
+  const handleBuyPlot = (plot) => {
+    if(auth.isAuthenticated === false) {
+      navigate('/login');
+    }
+    setSelectedPlot(plot);
+    setBuyModalOpen(true);
+  };
 
   const estateLBtns = [
     {
       icon: 'Share@4x.png',
       text: 'Share this Estate',
-      onClick: () =>
-        handleButtonClick(
-          'SHARE THIS ESTATE',
-          [
-            'whatsapp@4x.png',
-            'instagram@4x.png',
-            'facebook@4x.png',
-            'youtube@4x.png',
-            'twitter@4x.png',
-            'linkedin@4x.png',
-            'copy-link@4x.png',
-          ],
-          'icons',
-          ''
-        ),
+      onClick: handleShareEstate,
     },
   ];
+
   const estateRBtns = [
     {
       text: 'Book Physical Visit',
-      onClick: () => openDateModal(),
+      onClick: () => handleBookVisit(null),
     },
   ];
+
   const plotLBtns = [
     {
       icon: 'client-wishlist@4x.png',
       text: 'Add to Wish List',
-      onClick: () =>
-        handleButtonClick(
-          'Wishlist',
-          [],
-          'headingOnly',
-          'Successfully added to wish list'
-        ),
+      onClick: handleAddToWishlist,
+      isLoading: loading
     },
     {
       icon: 'Share@4x.png',
       text: 'Share this Estate',
-
-      onClick: () =>
-        handleButtonClick(
-          'SHARE THIS ESTATE',
-          [
-            'whatsapp@4x.png',
-            'instagram@4x.png',
-            'facebook@4x.png',
-            'youtube@4x.png',
-            'twitter@4x.png',
-            'linkedin@4x.png',
-            'copy-link@4x.png',
-          ],
-          'icons',
-          ''
-        ),
+      onClick: handleShareEstate,
     },
   ];
 
   const plotRBtns = [
     {
       text: 'Buy This Plot',
-      onClick: () => OpenBuyModal(),
+      onClick: handleBuyPlot,
     },
     {
       text: 'Reserve This Plot',
-      onClick: () => openReserveModal(),
+      onClick: handleReservePlot,
     },
     {
       text: 'Book Physical Visit',
-      onClick: () => openDateModal(),
+      onClick: handleBookVisit,
     },
   ];
 
-  const handleButtonClick = (
-    title,
-    icons,
-    modalLayoutType,
-    modalAdditionalText
-  ) => {
-    setModalTitle(title);
-    setModalIcons(icons);
-    setModalLayoutType(modalLayoutType);
-    setModalAdditionalText(modalAdditionalText);
-    setshareModalOpen(true);
-  };
-
-  const openDateModal = () => {
-    setdateModalOpen(true);
-  };
-
-  const closeDateModal = () => {
-    setdateModalOpen(false);
-  };
-
-  const openReserveModal = () => {
-    setreserveModalOpen(true);
-  };
-
-  const closeReserveModal = () => {
-    setreserveModalOpen(false);
-  };
-
-  const OpenBuyModal = () => {
-    setBuyModalOpen(true);
-  };
-
-  const closeBuyModal = () => {
-    setBuyModalOpen(false);
-  };
-//   if(plotNumber != null){
-// var exists = plots.some(plot => plot.plot_name === plotNumber)
-// if(!exists){
-//   toast({
-//     title: 'Invalid Plot Number.',
-//     description: "Please input the plot number as seen from the map.",
-//     status: 'error',
-//     duration: 3000,
-//     isClosable: true,
-//   })
-// }}
-
   return (
     <div>
-{estateLoading == true || plotLoading == true ? <Spinner /> :
-    
-    <div>
-      {isAgent ? (
-        <Link to="/agentDash">
-          <Image
-            src={`${process.env.PUBLIC_URL}/Assets/SVG/Left-Arrow.svg`}
-            width="30px"
-            my="1.5rem"
-            ml="2rem"
+      {estateLoading || plotLoading ? (
+        <Spinner />
+      ) : (
+        <div>
+          {isAgent && (
+            <Link to="/agentDash">
+              <Image
+                src={`${process.env.PUBLIC_URL}/Assets/SVG/Left-Arrow.svg`}
+                width="30px"
+                my="1.5rem"
+                ml="2rem"
+              />
+            </Link>
+          )}
+          {estates?.map((estate) => {
+            const matchingPlot = plotNumber
+              ? plots.find(
+                  (plot) =>
+                    plot.plot_name === plotNumber && plot.estate.id === estate.id
+                )
+              : null;
+
+            return (
+              <Box key={estate.id} marginTop="2rem">
+                <InputContainer
+                  inputData={matchingPlot || estate}
+                  isPlot={!!matchingPlot}
+                  estate={estate}
+                />
+                <ButtonsContainer
+                  leftButtons={matchingPlot ? plotLBtns.map(btn => ({...btn, onClick: () => btn.onClick(matchingPlot)})) : estateLBtns}
+                  rightButtons={matchingPlot ? plotRBtns.map(btn => ({...btn, onClick: () => btn.onClick(matchingPlot)})) : estateRBtns}
+                  flex_dir={'column-reverse'}
+                  Lbtn_margin={'0.5rem'}
+                  Rbtn_margin={'4rem'}
+                  box_height={'200px'}
+                />
+              </Box>
+            );
+          })}
+
+          <ShareModal
+            isOpen={shareModalOpen}
+            onClose={() => setShareModalOpen(false)}
           />
-        </Link>
-      ) : null}
-      {estates?.map((estate) => {
-  const matchingPlot = plotNumber
-    ? plots.find(plot => plot.plot_name === plotNumber && plot.estate.id === estate.id)
-    : null;
-
-  return (
-    <Box key={estate.id} marginTop="2rem">
-      <InputContainer 
-        inputData={matchingPlot || estate} 
-        isPlot={!!matchingPlot}
-        estate={estate}  // Pass the full estate object
-      />
-      <ButtonsContainer
-        leftButtons={matchingPlot ? plotLBtns.left : estateLBtns.left}
-        rightButtons={matchingPlot ? plotLBtns.right : estateLBtns.right}
-        flex_dir={'column-reverse'}
-        Lbtn_margin={'0.5rem'}
-        Rbtn_margin={'4rem'}
-        box_height={'200px'}
-      />
-    </Box>
-  );
-})}
-
-      <ShareModal
-        isOpen={shareModalOpen}
-        onClose={() => setshareModalOpen(false)}
-        title={modalTitle}
-        icons={modalIcons}
-        layoutType={modalLayoutType}
-        additionalText={modalAdditionalText}
-      />
-      <DateModal onClose={closeDateModal} isOpen={dateModalOpen} />
-      <ReserveModal onClose={closeReserveModal} isOpen={reserveModalOpen} />
-      <BuyModal onClose={closeBuyModal} isOpen={buyModalOpen} />
+          <DateModal 
+            isOpen={dateModalOpen} 
+            onClose={() => setDateModalOpen(false)} 
+            plot={selectedPlot}
+            userID={auth.user?.userId}
+          />
+          <ReserveModal 
+            isOpen={reserveModalOpen} 
+            onClose={() => setReserveModalOpen(false)} 
+            plot={selectedPlot}
+            userID={auth.user?.userId}
+          />
+          <BuyModal 
+            isOpen={buyModalOpen} 
+            onClose={() => setBuyModalOpen(false)} 
+            plot={selectedPlot}
+            userID={auth.user?.userId}
+          />
+        </div>
+      )}
     </div>
-}</div>);
-
+  );
 };
- 

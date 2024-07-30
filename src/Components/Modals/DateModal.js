@@ -16,10 +16,12 @@ import {
   Button,
   Box,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { SERVER_URL } from "../../utilities/constant/api/api_constant";
 
   const CustomDatePicker = ({ selectedDate, handleChange }) => {
   return (
@@ -54,31 +56,73 @@ import "react-datepicker/dist/react-datepicker.css";
   );
 };
 
-const DateModal = ({ isOpen, onClose }) => {
-  const [estateName, setEstateName] = useState("");
+const DateModal = ({ isOpen, onClose, plot, userID }) => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const handleDateChange = (date) => {
+    
     setSelectedDate(date);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log("Estate Name:", estateName);
-    console.log("Selected Date:", selectedDate);
-    onClose(); // Close the modal after submission
-    setEstateName("");
-    setSelectedDate(null);
-  };
-  const ClearInput = () => {
-    // Close the modal after submission
-    setEstateName("");
-    setSelectedDate(null);
-    onClose();
+  const handleSubmit = async () => {
+    if (!selectedDate) {
+      toast({
+        title: "Error",
+        description: "Please select a date",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+
+    var formdata = new FormData();
+    formdata.append("user_id", userID);
+    formdata.append("plot_id", plot?.id);
+    formdata.append("booked_date", formattedDate);
+
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch(`${SERVER_URL}/api/book_visit_plot/`, requestOptions);
+      const result = await response.json();
+      if (result.status_code === 200) {
+        toast({
+          title: result.status,
+          description: result.message,
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+        });
+        onClose();
+      } else {
+        throw new Error(result.message || "Failed to book visit");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={ClearInput}>
+    <Modal isOpen={isOpen} onClose={onClose} >
       <ModalOverlay />
       <ModalContent
         minH={{ base: "90px", md: "120px" }}
@@ -107,14 +151,11 @@ const DateModal = ({ isOpen, onClose }) => {
             borderColor="GrayText"
           />
           <VStack spacing={6}>
-     {/* Estate name and date inputs */}
+
             <HStack justifyContent="space-between" width="100%">
+           
               <FormControl>
-                <CustomLabel text="Estate Name" />
-                <CustomInput />
-              </FormControl>
-              <FormControl>
-                <CustomLabel text="Select Date" />
+                <CustomLabel  text="Select Date" />
                 <CustomDatePicker
                   selectedDate={selectedDate}
                   handleChange={handleDateChange}
@@ -159,6 +200,7 @@ const DateModal = ({ isOpen, onClose }) => {
                   backgroundColor: "#091c10",
                 }}
                 color="white"
+                isLoading={loading}
                 onClick={handleSubmit}
               >
                 Book Now

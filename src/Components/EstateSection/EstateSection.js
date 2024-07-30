@@ -20,7 +20,7 @@ export const EstateSection = ({ isAgent }) => {
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const [selectedPlot, setSelectedPlot] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [selectedEstate, setSelectedEstate] = useState(null);
   const estates = useEstateStore((state) => state.estates);
   const estateLoading = useEstateStore((state) => state.isLoading);
   const plots = usePlotStore((state) => state.plots);
@@ -29,9 +29,25 @@ export const EstateSection = ({ isAgent }) => {
   const toast = useToast();
   const auth = useAuth();
   const navigate = useNavigate();
-
-  const handleShareEstate = () => {
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalIcons, setModalIcons] = useState([]);
+  const [modalLayoutType, setModalLayoutType] = useState('');
+  const [modalAdditionalText, setModalAdditionalText] = useState('');
+  const [sharedItem, setSharedItem] = useState(null);
+  const handleShareEstate = (item) => {
     setShareModalOpen(true);
+    setModalTitle("SHARE THIS ESTATE");
+    setModalIcons([
+      'whatsapp@4x.png',
+
+      'facebook@4x.png',
+      'twitter@4x.png',
+      'linkedin@4x.png',
+      'copy-link@4x.png',
+    ]);
+    setModalLayoutType("icons");
+    setModalAdditionalText("");
+    setSharedItem(item);
   };
 
   const handleAddToWishlist = async (plot) => {
@@ -101,11 +117,10 @@ export const EstateSection = ({ isAgent }) => {
   };
 
   const estateLBtns = [
-    {
-      icon: 'Share@4x.png',
-      text: 'Share this Estate',
-      onClick: handleShareEstate,
-    },
+    // {
+    //   icon: 'Share@4x.png',
+    //   text: 'Share this Estate',
+    //   onClick: () => handleShareEstate,    },
   ];
 
   const estateRBtns = [
@@ -122,11 +137,11 @@ export const EstateSection = ({ isAgent }) => {
       onClick: handleAddToWishlist,
       isLoading: loading
     },
-    {
-      icon: 'Share@4x.png',
-      text: 'Share this Estate',
-      onClick: handleShareEstate,
-    },
+    // {
+    //   icon: 'Share@4x.png',
+    //   text: 'Share this Estate',
+    //   onClick: handleShareEstate,
+    // },
   ];
 
   const plotRBtns = [
@@ -161,6 +176,7 @@ export const EstateSection = ({ isAgent }) => {
             </Link>
           )}
           {estates?.map((estate) => {
+
             const matchingPlot = plotNumber
               ? plots.find(
                   (plot) =>
@@ -186,11 +202,16 @@ export const EstateSection = ({ isAgent }) => {
               </Box>
             );
           })}
-
           <ShareModal
-            isOpen={shareModalOpen}
-            onClose={() => setShareModalOpen(false)}
-          />
+  isOpen={shareModalOpen}
+  onClose={() => setShareModalOpen(false)}
+  title={modalTitle}
+  icons={modalIcons}
+  layoutType={modalLayoutType}
+  additionalText={modalAdditionalText}
+  sharedItem={sharedItem} // Add this line
+
+/>
           <DateModal 
             isOpen={dateModalOpen} 
             onClose={() => setDateModalOpen(false)} 

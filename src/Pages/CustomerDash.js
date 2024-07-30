@@ -17,8 +17,8 @@ export const CustomerDash = () => {
     <Box pb='3rem'>
 
       <Hero
-        heading={`Demetrius Kanyankole`}
-        desc={`+255 787 835 830 | dimy.kany@gmail.com `}
+        heading={auth.user.username}
+        desc={`${auth.user.email}`}
         secondDesc={'Welcome back'}
         margin="0"
         mb="3.5rem"

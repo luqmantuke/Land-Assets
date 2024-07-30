@@ -14,16 +14,16 @@ export const loginUser = async (email,password) => {
     return response.json();
   };
 
-  export const registerUser = async (email,password) => {
+  export const registerUser = async (username,email,password,phone_number,first_name,last_name) => {
 
     const formdata = new FormData();
 
-    formdata.append("username", "tegeka");
-    formdata.append("email", "mtegeka@gmail.com");
-    formdata.append("password", "@mtegeka");
-    formdata.append("phone_number", "255787835830");
-    formdata.append("first_name", "Tegeka");
-    formdata.append("last_name", "m");
+    formdata.append("username", username);
+    formdata.append("email", email);
+    formdata.append("password", password);
+    formdata.append("phone_number", phone_number);
+    formdata.append("first_name", first_name);
+    formdata.append("last_name", last_name);
     const requestOptions = {
       method: "POST",
       body: formdata,

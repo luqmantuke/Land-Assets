@@ -8,8 +8,12 @@ import {
   Image,
   Text,
   Checkbox,
+  useToast
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+
+import { useNavigate,Link } from "react-router-dom";
+import { useAuth } from "../../Hooks/Auth/AuthenticationContext";
+import { loginUser } from "../../Api/Auth/AuthenticationApi";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +22,11 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [formError, setFormError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const toast = useToast();
+  const auth = useAuth(); // Use the auth context
 
   const handleCheck = () => {
     setCheck(!check);
@@ -27,15 +36,40 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Check for empty inputs
     if (!email || !password) {
       setError("Fill all inputs");
       setFormError(true);
-    } else {
-      // Perform login logic here
-      setError("");
-      setFormError(false); // Clear any previous error message
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    setFormError(false);
+
+    try {
+      const response = await loginUser(email, password);
+      if (response.status_code === 200) {
+        // Successful login
+        auth.login(response); // Update auth context
+        toast({
+          title: "Login Successful",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        navigate("/"); // or "/agentDash" based on user role
+      } else {
+        // Login failed
+        setError(response.message || "Login failed. Please try again.");
+        setFormError(true);
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+      setFormError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -66,7 +100,7 @@ const LoginForm = () => {
         </Text>
         <Box display="flex" gap={{ base: "0.2rem", md: "0.5rem" }}>
           <Text textAlign="left" fontSize={{ base: "7px", md: "15px" }}>
-            Dont have an account?{" "}
+            Don't have an account?{" "}
           </Text>
           <Link to="/signUp">
             <Text
@@ -140,8 +174,6 @@ const LoginForm = () => {
               Keep me Logged in
             </Text>
           </Box>
-           <Link to={email ==='agent' && password === 'agent123' ? '/agentDash': email ==='customer' && password === 'customer123'?'/customerDash':null}>
-          
           <Button
             borderRadius="40px"
             margin="auto"
@@ -152,14 +184,15 @@ const LoginForm = () => {
             px={{ base: "1.3rem", md: "3rem" }}
             _hover={{ cursor: "pointer", backgroundColor: "btn_bg" }}
             onClick={handleLogin}
+            isLoading={isLoading}
           >
             Login
           </Button>
-          </Link>
         </HStack>
       </VStack>
     </Box>
   );
+
 };
 
 const CustomInput = ({

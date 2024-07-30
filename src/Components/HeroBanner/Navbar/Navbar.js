@@ -12,8 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { useAuth } from "../../../Hooks/Auth/AuthenticationContext";
 
 const Navbar = () => {
+  const auth = useAuth();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -84,12 +87,15 @@ const Navbar = () => {
             <NavbarLink text="Contact Us" />
           </Link>
           <Flex direction="row" gap={2}>
+           {auth.isAuthenticated === true ? <Link to="/customerDash">   <NavbarButton text="Dashboard" bg_color="none" />  </Link> :
             <Link to="/login">
               <NavbarButton text="Sign in" bg_color="none" />
-            </Link>
+            </Link> 
+            }
+            {auth.user.isAgent === 'True' ? <Link to="/agentDash">   <NavbarButton text="Agent Dashboard" bg_color="none" />  </Link> :
             <Link to="/signUp">
               <NavbarButton text="Become An Agent" bg_color="btn_bg" />
-            </Link>
+            </Link>}
           </Flex>
         </HStack>
 

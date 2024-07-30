@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext();
@@ -9,8 +9,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(['userToken', 'userId', 'userName','phoneNumber']);
-    const user = {'userId': cookies.userId, 'userToken': cookies.userToken, 'username': cookies.username,'email': cookies.email}
+    const [cookies, setCookie, removeCookie] = useCookies(['userToken', 'userId', 'userName','phoneNumber','isAgent']);
+    const user = {'userId': cookies.userId, 'userToken': cookies.userToken, 'username': cookies.userName,'email': cookies.email,'phoneNumber': cookies.phoneNumber,'isAgent': cookies.isAgent};
     const isAuthenticated = cookies.userId !== undefined;
 
 
@@ -20,7 +20,7 @@ console.log(`userData`, userData)
       setCookie('userId', userData.user_id, { path: '/' });
       setCookie('userName', userData.first_name, { path: '/' });
       setCookie('phoneNumber', userData.phone_number, { path: '/' });
-
+      setCookie('isAgent', userData.is_agent, { path: '/' });
     };
   
     const logout = () => {

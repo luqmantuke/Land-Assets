@@ -12,18 +12,16 @@ import {
 } from "@chakra-ui/react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth
-
-
- } from "../../Hooks/Auth/AuthenticationContext";
+import { useAuth } from "../../Hooks/Auth/AuthenticationContext";
 import { registerUser } from "../../Api/Auth/AuthenticationApi";
+
 const SignUpForm = () => {
-  const auth = useAuth(); 
+  const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [check, setCheck] = useState(false);
-  const [formError, setFormError] = useState(false)
-  const toast = useToast()
-  const navigate = useNavigate()
+  const [formError, setFormError] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
 
   // Input states
   const [firstName, setFirstName] = useState("");
@@ -43,7 +41,7 @@ const SignUpForm = () => {
   };
 
   const handleSignUp = () => {
-    // Check for empty inputs
+    // Check for empty inputs and password match
     if (
       !firstName ||
       !lastName ||
@@ -53,46 +51,73 @@ const SignUpForm = () => {
       !confirmPassword
     ) {
       setFormError(true);
+      toast({
+        title: "Error",
+        description: "Please fill all fields",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else if (password !== confirmPassword) {
+      setFormError(true);
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     } else {
       setFormError(false);
-      signUpUser()
+      signUpUser();
     }
   };
 
   async function signUpUser() {
     setIsLoading(true);
     try {
-      const response = await registerUser(emailAddress, password);
-      console.log(response)
-      if (response.status === 'success') {
-
-        console.log("response status is true")
+      const response = await registerUser(
+        `${firstName} ${lastName}`, // username
+        emailAddress,
+        password,
+        mobileNumber,
+        firstName,
+        lastName
+      );
+      console.log(`response`, response);
+      console.log(`response.data`, response.status_code);
+      if (response.status_code === 201) {
         auth.login(response);
+        toast({
+          title: "Account created",
+          description: "You have successfully signed up",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
         navigate('/');
       } else {
-        setIsLoading(false);
-        toast(response.message, {
-          type: 'error',
-          autoClose: 5000,
-          closeOnClick: true,
-          pauseOnHover: true,
+        toast({
+          title: "Error",
+          description: response.message || "An error occurred during registration",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
         });
-
       }
-
     } catch (error) {
-
-      setIsLoading(false);
-      toast('An error occurred while creating an account. Please contact support.', {
-        type: 'error',
-        autoClose: 5000,
-        closeOnClick: true,
-        pauseOnHover: true,
+      toast({
+        title: "Error",
+        description: "An error occurred while creating an account. Please contact support.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
       });
-
-
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
     <Box
       width={{ base: "70%", md: "50%" }}
@@ -271,20 +296,21 @@ const SignUpForm = () => {
               </Box>
               
             </Box>
-
             <Button
-              borderRadius="40px"
-              margin="auto"
-              height={{ base: "20px", md: "50px" }}
-              backgroundColor="#37ab46"
-              color="white"
-              fontSize={{ base: "6px", md: "12px" }}
-              px={{ base: "1.3rem", md: "3rem" }}
-              _hover={{ cursor: "pointer", backgroundColor: "btn_bg" }}
-              onClick={handleSignUp}
-            >
-              Create Account
-            </Button>
+      borderRadius="40px"
+      margin="auto"
+      height={{ base: "20px", md: "50px" }}
+      backgroundColor="#37ab46"
+      color="white"
+      fontSize={{ base: "6px", md: "12px" }}
+      px={{ base: "1.3rem", md: "3rem" }}
+      _hover={{ cursor: "pointer", backgroundColor: "btn_bg" }}
+      onClick={handleSignUp}
+      isLoading={isLoading}
+      loadingText="Creating Account"
+    >
+      Create Account
+    </Button>
           </HStack>
         </Box>
 

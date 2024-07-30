@@ -6,12 +6,12 @@ import TableContainer from "../Components/DashboardTable/TableContainer";
 import { Box } from "@chakra-ui/react";
 import TablesData from "../Components/DashboardTable/TablesData";
 import Agent from "../Components/DashboardContent/Agent";
-
+import { useAuth } from "../Hooks/Auth/AuthenticationContext";
 
 
 
 export const CustomerDash = () => {
-
+  const auth = useAuth();
 
   return (
     <Box pb='3rem'>

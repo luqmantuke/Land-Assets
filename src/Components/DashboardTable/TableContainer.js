@@ -12,11 +12,11 @@ import {
 } from "@chakra-ui/react";
 import DashTable from "./DashTable";
 import { Link } from "react-router-dom";
-import Notification from "../DashboardContent/Notification";
-import { SupportComp } from "../Support/SupportComp";
-import NotificationDetails from "../DashboardContent/NotificationDetails";
-import { initialNotificationsData } from "./TablesData";
-import Settings from "../DashboardContent/Settings";
+
+
+
+ 
+
 import Payout from "../DashboardContent/Payout";
 import PaymentMethod from "../DashboardContent/PaymentMethod";
 import ReferAgent from "../DashboardContent/ReferAgent";
@@ -140,15 +140,7 @@ const TableContainer = ({
         )}
       </HStack>
 
-      {boxType === "notification" ? (
-        <Notification />
-      ) : boxType === "support" ? (
-        <SupportComp />
-      ) : boxType === "notificationDetail" ? (
-        <NotificationDetails notificationsData={initialNotificationsData} />
-      ) : boxType === "settings" ? (
-        <Settings />
-      ) : boxType === "payout" ? (
+      {boxType === "payout" ? (
         <Payout />
       ) : boxType === "paymentMethod" ? (
         <PaymentMethod />

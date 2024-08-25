@@ -5,11 +5,11 @@ const TablesData={
     { icon: 'client-booked@4x.png', text: "Booked Plots",linkTo:'bookedPlots' },
     { icon: 'client-wishlist@4x.png', text: "My Wishlist" ,linkTo:'wishlist'},
     { icon: 'client-resale@4x.png', text: "Plots on Resale",linkTo:'resalePlots' },
-    { icon: 'client-notification@4x.png', text: "Notifications",linkTo:'notifications' },
+
     { icon: 'client-beagent@4x.png', text: "Become an Agent",linkTo:'becomeAgent' },
-    { icon: 'client-support@4x.png', text: "Support" ,linkTo:'support'},
-    { icon: 'client-settings@4x.png', text: "Settings",linkTo:'settings' },
-    { icon: '', text: "Empty",linkTo:'empty' },
+
+
+
   ],
   Agentdata : [
     { icon: 'client-myplots@4x.png', text: "View All Plots ",linkTo:'viewPlots' },
@@ -79,9 +79,7 @@ const TablesData={
         "Site Visit Bookings",
         "Wishlist",
         "Plots on Resale",
-        "Notification",
-        "Support",
-        "Settings"
+    
 
 
     ],
@@ -93,9 +91,8 @@ const TablesData={
       
       "My Payout",
       "Account Details",
-      "Invite Another Agent",
-      "Support",
-      "Settings"
+
+  
 
 
   ],

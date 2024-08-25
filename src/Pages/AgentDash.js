@@ -170,34 +170,7 @@ export const AgentDash = () => {
           }
         />
 
-        <Route
-          path="/notifications/*"
-          exact
-          element={
-            <TableContainer
-              heading={TablesData.headings[5]}
-              buttons={TablesData.empty}
-              elements={TablesData.empty}
-              tableData={TablesData.empty}
-              boxType="notification"
-              dashType="agent"
-            />
-          }
-        />
-        <Route
-          path="/notifications/:id"
-          exact
-          element={
-            <TableContainer
-              heading={TablesData.headings[5]}
-              buttons={TablesData.empty}
-              elements={TablesData.empty}
-              tableData={TablesData.empty}
-              boxType="notificationDetail"
-              dashType="agent"
-            />
-          }
-        />
+    
       </Routes>
     </Box>
   );

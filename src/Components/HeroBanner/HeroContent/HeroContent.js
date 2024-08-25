@@ -21,8 +21,8 @@ const HeroContent = () => {
          Whether you need a residential or commercial plot of any size and guaranteed title deed,We've got you covered
         </Text>
         <Stack direction={{ base: 'column', md: 'row' }} spacing={2}>
-          <ContentButton text=' View all estates' bg_color='none' />
-          <ContentButton text='Start Selling today' bg_color='none' />
+          {/* <ContentButton text=' View all estates' bg_color='none' />
+          <ContentButton text='Start Selling today' bg_color='none' /> */}
          
         
         </Stack>

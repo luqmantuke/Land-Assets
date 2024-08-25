@@ -8,9 +8,6 @@ import {
   Divider,
   ModalBody,
   FormControl,
-  FormLabel,
-  Input,
-  HStack,
   VStack,
   Image,
   Button,
@@ -18,39 +15,46 @@ import {
   Text,
   Checkbox,
   Stack,
+  HStack,
   useToast,
+  Input,
 } from "@chakra-ui/react";
 import { reserveIcons } from "../EstateSection/estateData";
 import { SERVER_URL } from "../../utilities/constant/api/api_constant.js";
-import {formattedPrice} from "../../common/price/PriceFormatter.js";
-import {phoneNumberFilter} from "../../common/phoneNumber/PhoneNumberFormat.js";
+import { formattedPrice } from "../../common/price/PriceFormatter.js";
+import { phoneNumberFilter } from "../../common/phoneNumber/PhoneNumberFormat.js";
+
 
 const BuyModal = ({ isOpen, onClose, plot, userID }) => {
-  const [paymentPlan, setPaymentPlan] = useState(null);
-  const [agreed, setAgreed] = useState(false);
+
+  const [paymentOption, setPaymentOption] = useState(null);
+  const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [phoneNumberValue, setPhoneNumberValue] = useState(null);
-  const [customInstallmentPrice, setCustomInstallmentPrice] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const toast = useToast();
 
-  const fullPaymentPrice = formattedPrice(plot?.full_payment);
-  const installmentPaymentPrice = formattedPrice(plot?.partial_payment);
-  const firstInstallmentPrice = plot?.first_installment;
+  const fullPaymentPrice = formattedPrice(plot?.plot_description?.cash_price);
+  const firstInstallmentPrice = plot?.plot_description?.first_installment;
   const firstInstallmentPriceFormatted = formattedPrice(firstInstallmentPrice);
-  const restInstallment = plot?.rest_installment;
-  const restInstallmentFormatted = formattedPrice(restInstallment);
+  const monthlyInstallment = formattedPrice(plot?.plot_description?.rest_installment);
 
-  const handleCustomPrice = (event) => setCustomInstallmentPrice(event.target.value);
+  const handlePaymentOptionChange = (option) => {
+    setPaymentOption(option);
+  };
 
-  const handlePaymentPlanChange = (plan) => {
-    setPaymentPlan(plan);
+  const handleCheck = () => {
+    setCheck(!check);
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    setPhoneNumber(e.target.value);
   };
 
   const handleSubmit = () => {
-    if (!phoneNumberValue) {
+    if (!paymentOption) {
       toast({
         title: 'Error',
-        description: 'Please input your phone number',
+        description: 'Please select a payment option',
         status: 'error',
         duration: 4000,
         isClosable: true,
@@ -58,7 +62,18 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
       return;
     }
 
-    const phoneNumberFiltered = phoneNumberFilter(phoneNumberValue);
+    if (!phoneNumber) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a phone number',
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const phoneNumberFiltered = phoneNumberFilter(phoneNumber);
     if (phoneNumberFiltered === 'invalid format') {
       toast({
         title: 'Error',
@@ -74,17 +89,17 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
 
     let apiEndpoint, amountPaid;
 
-    if (paymentPlan === 'full') {
+    if (paymentOption === 'full') {
       apiEndpoint = `${SERVER_URL}/api/full_purchase_plot/`;
-      amountPaid = plot?.full_payment;
-    } else if (paymentPlan === 'installment') {
+      amountPaid = plot?.plot_description?.cash_price;
+    } else if (paymentOption === 'partial') {
       apiEndpoint = `${SERVER_URL}/api/installment_purchase_plot/`;
-      amountPaid = customInstallmentPrice || firstInstallmentPrice;
+      amountPaid = firstInstallmentPrice;
 
-      if (customInstallmentPrice && customInstallmentPrice < firstInstallmentPrice) {
+      if (monthlyInstallment && monthlyInstallment < firstInstallmentPrice) {
         toast({
           title: 'Error',
-          description: `Custom Installment Price Should Be Greater than ${firstInstallmentPriceFormatted}`,
+          description: `Monthly Installment Should Be Greater than ${firstInstallmentPriceFormatted}`,
           status: 'error',
           duration: 4000,
           isClosable: true,
@@ -95,7 +110,7 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
     } else {
       toast({
         title: 'Error',
-        description: 'Please select a payment plan',
+        description: 'Please select a payment option',
         status: 'error',
         duration: 4000,
         isClosable: true,
@@ -109,6 +124,7 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
     formdata.append("plot_id", plot?.id);
     formdata.append("amount_paid", amountPaid);
     formdata.append("phone_number", phoneNumberFiltered);
+    formdata.append("payment_mode", "mno");
 
     var requestOptions = {
       method: 'POST',
@@ -147,63 +163,187 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
       });
   };
 
+  const ClearInput = () => {
+    setPaymentOption(null);
+    setCheck(false);
+    setPhoneNumber("");
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={ClearInput}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>BUY THIS PLOT</ModalHeader>
+      <ModalContent
+        minH={{ base: "90px", md: "120px" }}
+        minWidth={{ base: "200px", md: "800px" }}
+        padding={{ base: "20px 10px", md: "20px 30px" }}
+        pt={{ base: "15px", md: "20px" }}
+        mx={{ base: "1rem", md: "0" }}
+      >
+        <ModalHeader
+          margin="0px"
+          padding="0px"
+          fontSize="1rem"
+          fontWeight="bold"
+          mb="1rem"
+        >
+          BUY THIS PLOT
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <VStack spacing={4}>
+
+        <ModalBody display="flex" flexDir="column" gap="1rem" padding="0px">
+          <Divider
+            orientation="horizontal"
+            size="large"
+            opacity={1}
+            borderColor="GrayText"
+          />
+          <VStack spacing={6}>
+            <Box display="flex" width="100%" justifyContent="space-between">
+              <Text fontWeight="bold">Estate: {plot?.estate?.estate_name}</Text>
+              <Text fontWeight="bold">Plot Number: {plot?.plot_name}</Text>
+            </Box>
+            <Box display="flex" width="100%">
+              <FormControl
+                component="fieldset"
+                width={{ base: "50%", md: "35%" }}
+              >
+                <VStack spacing={2}>
+                  <Text
+                    width="100%"
+                    color="primary"
+                    fontSize={{ base: "10px", md: "13px" }}
+                  >
+                    Please Confirm Your Payment terms:
+                  </Text>
+                  <HStack width="100%" mb="0.8rem">
+                    <Stack direction="row">
+                      <Checkbox
+                        colorScheme="green"
+                        isChecked={paymentOption === "full"}
+                        _hover={{ boxShadow: "none" }}
+                        _focus={{ boxShadow: "none" }}
+                        onChange={() => handlePaymentOptionChange("full")}
+                      >
+                        <Text fontSize={{ base: "10px", md: "13px" }}>
+                          Full Payment
+                        </Text>
+                      </Checkbox>
+                      <Checkbox
+                        shadow="none"
+                        colorScheme="green"
+                        _hover={{ boxShadow: "none" }}
+                        _focus={{ boxShadow: "none" }}
+                        isChecked={paymentOption === "partial"}
+                        onChange={() => handlePaymentOptionChange("partial")}
+                      >
+                        <Text fontSize={{ base: "10px", md: "13px" }}>
+                          Partial Payment
+                        </Text>
+                      </Checkbox>
+                    </Stack>
+                  </HStack>
+
+                  {paymentOption === "full" && (
+                    <Text fontWeight="bold">Full Payment: {fullPaymentPrice}</Text>
+                  )}
+
+                  {paymentOption === "partial" && (
+                    <HStack width="100%">
+                      <CustomButton
+                        payment_txt={`1st Install ${firstInstallmentPriceFormatted}`}
+                        bg_color="primary"
+                        txt_color="white"
+                      />
+                      <CustomButton
+                        payment_txt={`${monthlyInstallment}/Month`}
+                        bg_color="#e6e9eb"
+                        txt_color="black"
+                      />
+                    </HStack>
+                  )}
+                </VStack>
+              </FormControl>
+
+              <Box
+                display="flex"
+                gap="0.5rem"
+                ml="0.5rem"
+                flexWrap="wrap"
+                justifyContent="space-around"
+              >
+                {reserveIcons.map((icon, index) => (
+                  <Image
+                    key={index}
+                    _hover={{ cursor: "pointer" }}
+                    src={`${process.env.PUBLIC_URL}/Assets/Images/${icon}`}
+                    alt={`Image ${index + 1}`}
+                    width={{ base: "60px", md: "72px" }}
+                    height={{ base: "30px", md: "40px" }}
+                  />
+                ))}
+              </Box>
+            </Box>
+
             <FormControl>
-              <FormLabel>Phone Number</FormLabel>
-              <Input 
-                value={phoneNumberValue} 
-                onChange={(e) => setPhoneNumberValue(e.target.value)}
-                placeholder="Enter your phone number"
+              <Text
+                width="100%"
+                color="primary"
+                fontSize={{ base: "10px", md: "13px" }}
+                mb={2}
+              >
+                Enter your phone number:
+              </Text>
+              <Input
+                placeholder="Phone number"
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+                width="100%"
               />
             </FormControl>
-            <FormControl>
-              <FormLabel>Payment Plan</FormLabel>
-              <Stack>
-                <Checkbox 
-                  isChecked={paymentPlan === 'full'} 
-                  onChange={() => handlePaymentPlanChange('full')}
-                >
-                  Full Payment ({fullPaymentPrice})
-                </Checkbox>
-                <Checkbox 
-                  isChecked={paymentPlan === 'installment'} 
-                  onChange={() => handlePaymentPlanChange('installment')}
-                >
-                  Installment Payment
-                </Checkbox>
-              </Stack>
-            </FormControl>
-            {paymentPlan === 'installment' && (
-              <FormControl>
-                <FormLabel>Installment Amount</FormLabel>
-                <Input 
-                  value={customInstallmentPrice} 
-                  onChange={handleCustomPrice}
-                  placeholder={`Minimum ${firstInstallmentPriceFormatted}`}
+
+            <HStack justifyContent="space-between" width="100%">
+              <Box display="flex" gap='0.2rem'>
+                <Checkbox
+                  onChange={handleCheck}
+                  border='none'
+                  colorScheme="primary"
+                  icon={<Image src={`/Assets/Images/${check ? 'check@4x.png' : 'uncheck@4x.png'}`} width={check ? 'auto' : '9px'} mt={check ? '0px' : '3px'} ml={check ? '3px' : '0px'}/>}
                 />
-                <Text fontSize="sm" color="gray.500">
-                  Remaining balance: {restInstallmentFormatted}
-                </Text>
-              </FormControl>
-            )}
-            <Checkbox isChecked={agreed} onChange={() => setAgreed(!agreed)}>
-              I agree to the terms and conditions
-            </Checkbox>
-            <Button 
-              onClick={handleSubmit} 
-              isLoading={loading} 
-              isDisabled={!agreed}
-              colorScheme="blue"
-            >
-              Complete Purchase
-            </Button>
+                <VStack spacing={0}>
+                  <Text
+                    color="GrayText"
+                    padding="0px"
+                    margin={0}
+                    fontSize={{ base: "8px", md: "10px" }}
+                  >
+                    I Agree to LandAssets
+                  </Text>
+                  <Text
+                    color="btn_border"
+                    padding="0px"
+                    margin={0}
+                    fontSize={{ base: "8px", md: "10px" }}
+                  >
+                    Privacy Policy & Terms
+                  </Text>
+                </VStack>
+              </Box>
+              <Button
+                backgroundColor="btn_bg"
+                border="2px solid"
+                fontSize={{ base: "10px", md: "12px" }}
+                fontWeight="normal"
+                px={{ base: "15px", md: "20px" }}
+                borderColor="btn_border"
+                _hover={{ backgroundColor: "#091c10" }}
+                color="white"
+                onClick={handleSubmit}
+                isLoading={loading}
+                isDisabled={ !paymentOption || !phoneNumber}
+              >
+                Buy This Plot
+              </Button>
+            </HStack>
           </VStack>
         </ModalBody>
       </ModalContent>
@@ -212,3 +352,29 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
 };
 
 export default BuyModal;
+
+
+
+const CustomButton = ({ payment_txt, bg_color, txt_color }) => {
+  return (
+    <Button
+      backgroundColor={bg_color}
+      color={txt_color}
+      fontSize={{ base: "8px", md: "12px" }}
+      fontWeight="normal"
+      px={{ base: "10px", md: "20px" }}
+      _hover={{
+        backgroundColor: { bg_color },
+        color: { txt_color },
+        boxShadow: "none",
+      }}
+      _focus={{
+        backgroundColor: { bg_color },
+        color: { txt_color },
+        boxShadow: "none",
+      }}
+    >
+      {payment_txt}
+    </Button>
+  );
+};

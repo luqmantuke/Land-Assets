@@ -145,10 +145,10 @@ export const EstateSection = ({ isAgent }) => {
   ];
 
   const plotRBtns = [
-    // {
-    //   text: 'Buy This Plot',
-    //   onClick: handleBuyPlot,
-    // },
+    {
+      text: 'Buy This Plot',
+      onClick: handleBuyPlot,
+    },
     {
       text: 'Reserve This Plot',
       onClick: handleReservePlot,

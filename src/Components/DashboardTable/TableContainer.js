@@ -21,7 +21,6 @@ import Payout from "../DashboardContent/Payout";
 import PaymentMethod from "../DashboardContent/PaymentMethod";
 import ReferAgent from "../DashboardContent/ReferAgent";
 
-
 const TableContainer = ({
   heading,
   buttons,
@@ -30,6 +29,26 @@ const TableContainer = ({
   boxType,
   dashType,
 }) => {
+  // Function to convert array of objects to array of arrays
+  const convertToArrayOfArrays = (data) => {
+    if (!data || data.length === 0) return [];
+    
+    // If it's already an array of arrays, return as is
+    if (Array.isArray(data[0])) return data;
+
+    // Get headers from the first object
+    const headers = Object.keys(data[0]);
+    
+    // Convert objects to arrays
+    const rows = data.map(obj => headers.map(header => obj[header]));
+
+    // Add headers as the first row
+    return [headers, ...rows];
+  };
+
+  // Convert tableData if it's not empty
+  const convertedTableData = tableData && tableData.length > 0 ? convertToArrayOfArrays(tableData) : [];
+
   return (
     <Box
       py={{ base: "30px", md: "40px" }}
@@ -131,13 +150,13 @@ const TableContainer = ({
         <Settings />
       ) : boxType === "payout" ? (
         <Payout />
-      ) : boxType === "paymentMethod" ?(
-       <PaymentMethod/>
-      ):boxType === "refer"?(
-           <ReferAgent/>
-      ):(
-        <DashTable data={tableData} />
-     ) }
+      ) : boxType === "paymentMethod" ? (
+        <PaymentMethod />
+      ) : boxType === "refer" ? (
+        <ReferAgent />
+      ) : (
+        <DashTable data={convertedTableData} />
+      )}
     </Box>
   );
 };

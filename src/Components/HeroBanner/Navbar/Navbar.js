@@ -93,9 +93,8 @@ const Navbar = () => {
             </Link> 
             }
             {auth.user.isAgent === 'True' ? <Link to="/agentDash">   <NavbarButton text="Agent Dashboard" bg_color="none" />  </Link> :
-            <Link to="/signUp">
-              <NavbarButton text="Become An Agent" bg_color="btn_bg" />
-            </Link>}
+            <></>
+          }
           </Flex>
         </HStack>
 
@@ -128,9 +127,7 @@ const Navbar = () => {
               <Link to="/login">
                 <NavbarButton text="Sign in" bg_color="none" />
               </Link>
-              <Link to="/signUp">
-                <NavbarButton text="Become An Agent" bg_color="btn_bg" />
-              </Link>
+            
             </Flex>
           </VStack>
         </Collapse>

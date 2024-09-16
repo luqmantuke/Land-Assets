@@ -9,8 +9,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(['userToken', 'userId', 'userName','phoneNumber','isAgent']);
-    const user = {'userId': cookies.userId, 'userToken': cookies.userToken, 'username': cookies.userName,'email': cookies.email,'phoneNumber': cookies.phoneNumber,'isAgent': cookies.isAgent};
+    const [cookies, setCookie, removeCookie] = useCookies(['userToken', 'userId', 'userName','phoneNumber','isAgent', 'agentId']);
+    const user = {'userId': cookies.userId, 'userToken': cookies.userToken, 'username': cookies.userName,'email': cookies.email,'phoneNumber': cookies.phoneNumber,'isAgent': cookies.isAgent, 'agentId': cookies.agentId};
     console.log(user)
     const isAuthenticated = cookies.userId !== undefined;
 
@@ -23,6 +23,7 @@ console.log(`userData`, userData)
       setCookie('phoneNumber', userData.phone_number, { path: '/' });
       setCookie('isAgent', userData.is_agent, { path: '/' });
       setCookie('email', userData.email, { path: '/' });
+      setCookie('agentId', userData.agent_id, { path: '/' });
     };
   
     const logout = () => {
@@ -31,6 +32,8 @@ console.log(`userData`, userData)
       removeCookie('userId', { path: '/' });
       removeCookie('userName', { path: '/' });
       removeCookie('phoneNumber', { path: '/' });
+      removeCookie('isAgent', { path: '/' });
+      removeCookie('agentId', { path: '/' });
     };
 
 

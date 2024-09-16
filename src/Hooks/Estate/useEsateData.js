@@ -19,7 +19,7 @@ export const useFetchEstates = () => {
     if(!isLoading){
         setDataLoading(false);
     }
- 
+  
   
 
     if(data){

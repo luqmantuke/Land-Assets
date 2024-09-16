@@ -12,6 +12,7 @@ import { useAuth } from "../Hooks/Auth/AuthenticationContext";
 
 export const AgentDash = () => {
   const { user } = useAuth();
+  useAgentStatistics();
   const stats = useAgentStatisticsStore((state) => state.stats);
   const isLoading = useAgentStatisticsStore((state) => state.dataLoading);
   const isError = useAgentStatisticsStore((state) => state.isError);

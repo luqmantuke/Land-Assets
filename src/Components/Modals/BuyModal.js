@@ -31,6 +31,7 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
   const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const toast = useToast();
 
   const fullPaymentPrice = formattedPrice(plot?.plot_description?.cash_price);
@@ -125,6 +126,7 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
     formdata.append("amount_paid", amountPaid);
     formdata.append("phone_number", phoneNumberFiltered);
     formdata.append("payment_mode", "mno");
+    if (referralCode) formdata.append("agent_referral_code", referralCode);
 
     var requestOptions = {
       method: 'POST',
@@ -167,6 +169,7 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
     setPaymentOption(null);
     setCheck(false);
     setPhoneNumber("");
+    setReferralCode("");
   };
 
   return (
@@ -297,6 +300,23 @@ const BuyModal = ({ isOpen, onClose, plot, userID }) => {
                 placeholder="Phone number"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
+                width="100%"
+              />
+            </FormControl>
+
+            <FormControl>
+              <Text
+                width="100%"
+                color="primary"
+                fontSize={{ base: "10px", md: "13px" }}
+                mb={2}
+              >
+                Enter referral code (optional):
+              </Text>
+              <Input
+                placeholder="Referral code"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
                 width="100%"
               />
             </FormControl>

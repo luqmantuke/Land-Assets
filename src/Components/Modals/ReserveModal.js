@@ -26,6 +26,7 @@ const ReserveModal = ({ isOpen, onClose, plot, userID }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
   const toast = useToast();
 
   const handleCheck = () => {
@@ -50,6 +51,8 @@ const ReserveModal = ({ isOpen, onClose, plot, userID }) => {
     formdata.append("plot_id", plot?.id);
     formdata.append("amount_paid", 100000);
     formdata.append("phone_number", phoneNumber);
+
+    if (referralCode) formdata.append("agent_referral_code", referralCode);
 
     var requestOptions = {
       method: 'POST',

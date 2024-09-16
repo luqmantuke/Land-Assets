@@ -60,6 +60,7 @@ const DateModal = ({ isOpen, onClose, plot, userID }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const [referralCode, setReferralCode] = useState("");
 
   const handleDateChange = (date) => {
     
@@ -85,6 +86,8 @@ const DateModal = ({ isOpen, onClose, plot, userID }) => {
     formdata.append("user_id", userID);
     formdata.append("plot_id", plot?.id);
     formdata.append("booked_date", formattedDate);
+
+    if (referralCode) formdata.append("agent_referral_code", referralCode);
 
     var requestOptions = {
       method: 'POST',

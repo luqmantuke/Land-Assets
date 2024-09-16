@@ -1,4 +1,3 @@
-
 import './App.css';
 import { Home } from './Pages/Home';
 import { AboutUs } from './Pages/AboutUs';
@@ -9,15 +8,27 @@ import { Login } from './Pages/Login';
 import { SignUp } from './Pages/SignUp';
 import { CustomerDash } from './Pages/CustomerDash';
 import { AgentDash } from './Pages/AgentDash';
-import { BrowserRouter as Router, Navigate, useRoutes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, useRoutes, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useAuth,AuthProvider } from './Hooks/Auth/AuthenticationContext';
+import { useEffect } from 'react';
+import { trackReferralClick } from './Api/agent/agentsApi'; // We'll create this function
 
 const queryClient = new QueryClient();
 
 const AppWrapper = () => {
   const auth = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const referralCode = searchParams.get('referralCode');
+
+    if (referralCode) {
+      trackReferralClick(referralCode);
+    }
+  }, [location]);
 
   let routes = useRoutes([
     { path: "/", element: <Home /> },

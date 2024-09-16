@@ -23,3 +23,22 @@ export const fetchAgentStatistics = async (agentId) => {
     return null;
   }
 };
+
+export const trackReferralClick = async (referralCode) => {
+  const formdata = new FormData();
+  formdata.append("referral_code", referralCode);
+
+  const requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow"
+  };
+
+  try {
+    const response = await fetch(`${SERVER_URL}/api/agent/track_click/`, requestOptions);
+    const result = await response.text();
+    console.log(result);
+  } catch (error) {
+    console.error("Error tracking referral click:", error);
+  }
+};

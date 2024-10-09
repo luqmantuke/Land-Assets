@@ -16,9 +16,12 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  useToast,
 } from "@chakra-ui/react";
 import DashTable from "./DashTable";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../Hooks/Auth/AuthenticationContext.jsx";
+import BuyModal from "../Modals/BuyModal.js";
 
 import Payout from "../DashboardContent/Payout";
 import PaymentMethod from "../DashboardContent/PaymentMethod";
@@ -33,7 +36,11 @@ const TableContainer = ({
   dashType,
 }) => {
   const [selectedPlot, setSelectedPlot] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPlotDetailsModalOpen, setIsPlotDetailsModalOpen] = useState(false);
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   // Function to convert array of objects to array of arrays
   const convertToArrayOfArrays = (data) => {
@@ -65,9 +72,60 @@ const TableContainer = ({
     console.log("Selected plot:", selectedPlot);
     if (selectedPlot) {
       console.log("Opening modal");
-      setIsModalOpen(true);
+      setIsPlotDetailsModalOpen(true);
     }
   };
+
+  const handlePayNow = () => {
+    if (auth.isAuthenticated === false) {
+      navigate('/login');
+    } else if (selectedPlot) {
+      setIsBuyModalOpen(true);
+    } else {
+      toast({
+        title: "No plot selected",
+        description: "Please select a plot before proceeding to payment.",
+        status: 'warning',
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const renderPlotDetailsModal = () => (
+    <Modal isOpen={isPlotDetailsModalOpen} onClose={() => setIsPlotDetailsModalOpen(false)}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Plot Details</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          {selectedPlot && (
+            <>
+              <Text><strong>Plot No:</strong> {selectedPlot['Plot No']}</Text>
+              <Text><strong>Estate Name:</strong> {selectedPlot['Estate Name']}</Text>
+              <Text><strong>Size:</strong> {selectedPlot['Size']}</Text>
+              <Text><strong>Price:</strong> {selectedPlot['Price']}</Text>
+              <Text><strong>Pending Payment:</strong> {selectedPlot['Pending Payment']}</Text>
+            </>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={() => setIsPlotDetailsModalOpen(false)}>
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+
+  const renderBuyModal = () => (
+    <BuyModal 
+      isOpen={isBuyModalOpen} 
+      onClose={() => setIsBuyModalOpen(false)} 
+      plot={selectedPlot}
+      userID={auth.user?.userId}
+    />
+  );
 
   return (
     <Box
@@ -102,6 +160,8 @@ const TableContainer = ({
                 console.log("Button clicked:", button);
                 if (button === "Plot Details") {
                   handlePlotDetails();
+                } else if (button === "Pay Now") {
+                  handlePayNow();
                 }
               }}
               backgroundColor={
@@ -180,30 +240,8 @@ const TableContainer = ({
         />
       )}
 
-      {/* Modal for Plot Details */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Plot Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {selectedPlot && (
-              <>
-                <Text><strong>Plot No:</strong> {selectedPlot['Plot No']}</Text>
-                <Text><strong>Estate Name:</strong> {selectedPlot['Estate Name']}</Text>
-                <Text><strong>Size:</strong> {selectedPlot['Size']}</Text>
-                <Text><strong>Price:</strong> {selectedPlot['Price']}</Text>
-                <Text><strong>Pending Payment:</strong> {selectedPlot['Pending Payment']}</Text>
-              </>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {renderPlotDetailsModal()}
+      {renderBuyModal()}
     </Box>
   );
 };

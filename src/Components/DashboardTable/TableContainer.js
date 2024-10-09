@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -9,13 +9,16 @@ import {
   HStack,
   Text,
   Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import DashTable from "./DashTable";
 import { Link } from "react-router-dom";
-
-
-
- 
 
 import Payout from "../DashboardContent/Payout";
 import PaymentMethod from "../DashboardContent/PaymentMethod";
@@ -29,6 +32,9 @@ const TableContainer = ({
   boxType,
   dashType,
 }) => {
+  const [selectedPlot, setSelectedPlot] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Function to convert array of objects to array of arrays
   const convertToArrayOfArrays = (data) => {
     if (!data || data.length === 0) return [];
@@ -48,6 +54,20 @@ const TableContainer = ({
 
   // Convert tableData if it's not empty
   const convertedTableData = tableData && tableData.length > 0 ? convertToArrayOfArrays(tableData) : [];
+
+  const handlePlotSelection = (plot) => {
+    console.log("Plot selected:", plot);
+    setSelectedPlot(plot);
+  };
+
+  const handlePlotDetails = () => {
+    console.log("handlePlotDetails called");
+    console.log("Selected plot:", selectedPlot);
+    if (selectedPlot) {
+      console.log("Opening modal");
+      setIsModalOpen(true);
+    }
+  };
 
   return (
     <Box
@@ -78,6 +98,12 @@ const TableContainer = ({
           {buttons.map((button, index) => (
             <Button
               key={index}
+              onClick={() => {
+                console.log("Button clicked:", button);
+                if (button === "Plot Details") {
+                  handlePlotDetails();
+                }
+              }}
               backgroundColor={
                 index === buttons.length - 1 ? "primary" : "gray.200"
               }
@@ -87,6 +113,7 @@ const TableContainer = ({
               px={{ base: "7px", md: "15px" }}
               _hover={{ backgroundColor: "green.700", color: "white" }}
               fontSize={{ base: "8px", md: "12px" }}
+              isDisabled={!selectedPlot}
             >
               {button}
             </Button>
@@ -147,8 +174,36 @@ const TableContainer = ({
       ) : boxType === "refer" ? (
         <ReferAgent />
       ) : (
-        <DashTable data={convertedTableData} />
+        <DashTable 
+          data={convertedTableData} 
+          onRowClick={handlePlotSelection}
+        />
       )}
+
+      {/* Modal for Plot Details */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Plot Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {selectedPlot && (
+              <>
+                <Text><strong>Plot No:</strong> {selectedPlot['Plot No']}</Text>
+                <Text><strong>Estate Name:</strong> {selectedPlot['Estate Name']}</Text>
+                <Text><strong>Size:</strong> {selectedPlot['Size']}</Text>
+                <Text><strong>Price:</strong> {selectedPlot['Price']}</Text>
+                <Text><strong>Pending Payment:</strong> {selectedPlot['Pending Payment']}</Text>
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

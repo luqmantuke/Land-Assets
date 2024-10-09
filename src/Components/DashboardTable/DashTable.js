@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Checkbox, Button } from "@chakra-ui/react";
 
-const DashTable = ({ data }) => {
+const DashTable = ({ data, onRowClick }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -23,6 +23,13 @@ const DashTable = ({ data }) => {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     setSelectedRows([]);
+  };
+
+  const handleRowClick = (rowData) => {
+    if (onRowClick) {
+      const plotData = data[0].reduce((obj, key, i) => ({ ...obj, [key]: rowData[i] }), {});
+      onRowClick(plotData);
+    }
   };
 
   return (
@@ -48,7 +55,8 @@ const DashTable = ({ data }) => {
                fontWeight='bold'
               borderBottom="0.1rem solid #aba9a9"
               borderTop={rowIndex === 0 ? "1px" : "0px"}
-              
+              onClick={() => handleRowClick(row)}
+              cursor="pointer"
             >
               <Td>
                 {/* Checkbox for each data row */}

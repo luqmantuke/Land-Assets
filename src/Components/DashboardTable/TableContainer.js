@@ -160,7 +160,7 @@ const TableContainer = ({
                 console.log("Button clicked:", button);
                 if (button === "Plot Details") {
                   handlePlotDetails();
-                } else if (button === "Pay Now") {
+                } else if (button === "Pay Now" || button === "Buy Now") {
                   handlePayNow();
                 }
               }}

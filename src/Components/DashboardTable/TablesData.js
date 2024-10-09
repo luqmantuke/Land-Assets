@@ -97,7 +97,6 @@ const TablesData={
 
   ],
     button1:[
-         "Remove",
          "Plot Details",
          "Buy Now"
     ],
@@ -106,15 +105,13 @@ const TablesData={
         "Pay Now"
     ],
     buttons3:[
-        "Remove",
-        "Share"
+        "Plot Details"
     ],
     buttons4:[
       "Payment Details",
       "Pay Now"
   ],
   buttons5:[
-    "Remove",
     "View Details",
     "Sell Now"
 ],
